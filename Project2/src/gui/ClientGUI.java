@@ -201,6 +201,11 @@ public class ClientGUI {
 		panel.add(passwordField);
 		
 		JButton button = new JButton("Logga in");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("ASD");
+			}
+		});
 		button.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		button.setBounds(10, 166, 212, 50);
 		panel.add(button);
