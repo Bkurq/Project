@@ -74,7 +74,7 @@ public class ClientGUI {
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE)
 						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
@@ -86,10 +86,10 @@ public class ClientGUI {
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(panel_2, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 531, Short.MAX_VALUE)
+						.addComponent(panel_2, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 227, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
+							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 289, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
 							.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap())
 		);
@@ -203,12 +203,16 @@ public class ClientGUI {
 		JButton button = new JButton("Logga in");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("ASD");
 			}
 		});
 		button.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		button.setBounds(10, 166, 212, 50);
 		panel.add(button);
+		
+		JButton btnLoggaUt = new JButton("Logga ut");
+		btnLoggaUt.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		btnLoggaUt.setBounds(10, 227, 212, 50);
+		panel.add(btnLoggaUt);
 		frame.getContentPane().setLayout(groupLayout);
 	}
 }
