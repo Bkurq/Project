@@ -114,33 +114,34 @@ public class ClientGUI {
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_panel_2.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(txtNamn, GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+					.addContainerGap())
 				.addGroup(gl_panel_2.createSequentialGroup()
 					.addGap(10)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_2.createSequentialGroup()
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+							.addComponent(textPane, GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+							.addContainerGap())
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
 								.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
-								.addGroup(Alignment.TRAILING, gl_panel_2.createSequentialGroup()
+								.addGroup(gl_panel_2.createSequentialGroup()
 									.addComponent(button_4, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(button_5, GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-									.addPreferredGap(ComponentPlacement.RELATED)))
-							.addGap(10))
-						.addGroup(Alignment.TRAILING, gl_panel_2.createSequentialGroup()
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
-								.addComponent(txtNamn, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
-								.addComponent(textPane, GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE))
-							.addContainerGap())))
+									.addComponent(button_5, GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)))
+							.addGap(10))))
 		);
 		gl_panel_2.setVerticalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_2.createSequentialGroup()
-					.addGap(11)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-					.addGap(31)
+					.addContainerGap()
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
 					.addComponent(txtNamn, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(textPane, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+					.addComponent(textPane, GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
 					.addGap(18)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 						.addComponent(button_4, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
@@ -151,7 +152,7 @@ public class ClientGUI {
 		JList list = new JList();
 		list.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		list.setModel(new AbstractListModel() {
-			String[] values = new String[] {"1", "2", "3", "4", "5", "6"};
+			String[] values = new String[] {"1", "2", "3", "4", "5", "6", "7", "8"};
 			public int getSize() {
 				return values.length;
 			}
