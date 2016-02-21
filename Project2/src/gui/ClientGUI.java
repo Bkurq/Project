@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -26,9 +27,9 @@ import java.awt.Font;
 public class ClientGUI {
 
 	private JFrame frame;
-	private JTextField textField;
-	private JPasswordField passwordField;
-	private JTextField txtNamn;
+	private JTextField textFieldUserName;
+	private JPasswordField textFieldPassword;
+	private JTextField textFieldName;
 
 	/**
 	 * Launch the application.
@@ -58,27 +59,28 @@ public class ClientGUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 632, 597);
+		frame.setBounds(100, 100, 701, 597);
+		frame.setMinimumSize(new Dimension(701, 597));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		JPanel panel = new JPanel();
-		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		JPanel panelAuthentication = new JPanel();
+		panelAuthentication.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		JPanel panelAction = new JPanel();
+		panelAction.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		JPanel panelRecords = new JPanel();
+		panelRecords.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE))
+						.addComponent(panelAction, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panelAuthentication, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+					.addComponent(panelRecords, GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
@@ -86,72 +88,72 @@ public class ClientGUI {
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(panel_2, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(panelRecords, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 289, GroupLayout.PREFERRED_SIZE)
+							.addComponent(panelAuthentication, GroupLayout.PREFERRED_SIZE, 289, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-							.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(panelAction, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap())
 		);
 		
-		JTextPane textPane = new JTextPane();
-		textPane.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		textPane.setText("Record");
+		JTextPane textPaneRecord = new JTextPane();
+		textPaneRecord.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		textPaneRecord.setText("Record");
 		
-		txtNamn = new JTextField();
-		txtNamn.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		txtNamn.setText("Namn");
-		txtNamn.setColumns(10);
+		textFieldName = new JTextField();
+		textFieldName.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		textFieldName.setText("Namn");
+		textFieldName.setColumns(10);
 		
-		JScrollPane scrollPane = new JScrollPane();
+		JScrollPane scrollPaneRecords = new JScrollPane();
 		
-		JButton button_4 = new JButton("Spara \u00E4ndringar");
-		button_4.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		JButton buttonSave = new JButton("Spara \u00E4ndringar");
+		buttonSave.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		
-		JButton button_5 = new JButton("Ignorera \u00E4ndringar");
-		button_5.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		button_5.setToolTipText("");
-		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
-		gl_panel_2.setHorizontalGroup(
-			gl_panel_2.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_panel_2.createSequentialGroup()
+		JButton buttonDiscard = new JButton("Ignorera \u00E4ndringar");
+		buttonDiscard.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		buttonDiscard.setToolTipText("");
+		GroupLayout gl_panelRecords = new GroupLayout(panelRecords);
+		gl_panelRecords.setHorizontalGroup(
+			gl_panelRecords.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_panelRecords.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(txtNamn, GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+					.addComponent(textFieldName, GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
 					.addContainerGap())
-				.addGroup(gl_panel_2.createSequentialGroup()
+				.addGroup(gl_panelRecords.createSequentialGroup()
 					.addGap(10)
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_2.createSequentialGroup()
-							.addComponent(textPane, GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+					.addGroup(gl_panelRecords.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panelRecords.createSequentialGroup()
+							.addComponent(textPaneRecord, GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
 							.addContainerGap())
-						.addGroup(gl_panel_2.createSequentialGroup()
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
-								.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
-								.addGroup(gl_panel_2.createSequentialGroup()
-									.addComponent(button_4, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+						.addGroup(gl_panelRecords.createSequentialGroup()
+							.addGroup(gl_panelRecords.createParallelGroup(Alignment.TRAILING)
+								.addComponent(scrollPaneRecords, GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+								.addGroup(gl_panelRecords.createSequentialGroup()
+									.addComponent(buttonSave, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(button_5, GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)))
+									.addComponent(buttonDiscard, GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)))
 							.addGap(10))))
 		);
-		gl_panel_2.setVerticalGroup(
-			gl_panel_2.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_2.createSequentialGroup()
+		gl_panelRecords.setVerticalGroup(
+			gl_panelRecords.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelRecords.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
+					.addComponent(scrollPaneRecords, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
-					.addComponent(txtNamn, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+					.addComponent(textFieldName, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(textPane, GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+					.addComponent(textPaneRecord, GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
 					.addGap(18)
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-						.addComponent(button_4, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-						.addComponent(button_5, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_panelRecords.createParallelGroup(Alignment.BASELINE)
+						.addComponent(buttonSave, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonDiscard, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
 					.addGap(9))
 		);
 		
-		JList list = new JList();
-		list.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		list.setModel(new AbstractListModel() {
+		JList listRecords = new JList();
+		listRecords.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		listRecords.setModel(new AbstractListModel() {
 			String[] values = new String[] {"1", "2", "3", "4", "5", "6", "7", "8"};
 			public int getSize() {
 				return values.length;
@@ -160,60 +162,60 @@ public class ClientGUI {
 				return values[index];
 			}
 		});
-		scrollPane.setViewportView(list);
-		panel_2.setLayout(gl_panel_2);
+		scrollPaneRecords.setViewportView(listRecords);
+		panelRecords.setLayout(gl_panelRecords);
 		
-		JButton button_1 = new JButton("L\u00E4gga till");
-		button_1.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		button_1.setBounds(10, 11, 212, 50);
+		JButton buttonAdd = new JButton("Lägg till");
+		buttonAdd.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		buttonAdd.setBounds(10, 11, 212, 50);
 		
-		JButton button_2 = new JButton("Redigera");
-		button_2.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		button_2.setBounds(10, 72, 212, 50);
+		JButton buttonEdit = new JButton("Redigera");
+		buttonEdit.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		buttonEdit.setBounds(10, 72, 212, 50);
 		
-		JButton button_3 = new JButton("Ta bort");
-		button_3.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		button_3.setBounds(10, 133, 212, 50);
-		panel_1.setLayout(null);
-		panel_1.add(button_1);
-		panel_1.add(button_2);
-		panel_1.add(button_3);
-		panel.setLayout(null);
+		JButton buttonRemove = new JButton("Ta bort");
+		buttonRemove.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		buttonRemove.setBounds(10, 133, 212, 50);
+		panelAction.setLayout(null);
+		panelAction.add(buttonAdd);
+		panelAction.add(buttonEdit);
+		panelAction.add(buttonRemove);
+		panelAuthentication.setLayout(null);
 		
-		JLabel label = new JLabel("Anv\u00E4ndarnamn");
-		label.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		label.setLabelFor(label);
-		label.setBounds(10, 10, 205, 14);
-		panel.add(label);
+		JLabel labelUserName = new JLabel("Anv\u00E4ndarnamn");
+		labelUserName.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		labelUserName.setLabelFor(labelUserName);
+		labelUserName.setBounds(10, 10, 205, 14);
+		panelAuthentication.add(labelUserName);
 		
-		textField = new JTextField();
-		textField.setBounds(10, 35, 212, 30);
-		textField.setColumns(10);
-		panel.add(textField);
+		textFieldUserName = new JTextField();
+		textFieldUserName.setBounds(10, 35, 212, 30);
+		textFieldUserName.setColumns(10);
+		panelAuthentication.add(textFieldUserName);
 		
-		JLabel label_1 = new JLabel("L\u00F6senord");
-		label_1.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		label_1.setLabelFor(label_1);
-		label_1.setBounds(10, 76, 205, 14);
-		panel.add(label_1);
+		JLabel labelPassword = new JLabel("L\u00F6senord");
+		labelPassword.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		labelPassword.setLabelFor(labelPassword);
+		labelPassword.setBounds(10, 76, 205, 14);
+		panelAuthentication.add(labelPassword);
 		
-		passwordField = new JPasswordField();
-		passwordField.setBounds(10, 101, 212, 30);
-		panel.add(passwordField);
+		textFieldPassword = new JPasswordField();
+		textFieldPassword.setBounds(10, 101, 212, 30);
+		panelAuthentication.add(textFieldPassword);
 		
-		JButton button = new JButton("Logga in");
-		button.addActionListener(new ActionListener() {
+		JButton buttonLogIn = new JButton("Logga in");
+		buttonLogIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		button.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		button.setBounds(10, 166, 212, 50);
-		panel.add(button);
+		buttonLogIn.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		buttonLogIn.setBounds(10, 166, 212, 50);
+		panelAuthentication.add(buttonLogIn);
 		
-		JButton btnLoggaUt = new JButton("Logga ut");
-		btnLoggaUt.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		btnLoggaUt.setBounds(10, 227, 212, 50);
-		panel.add(btnLoggaUt);
+		JButton buttonLogOut = new JButton("Logga ut");
+		buttonLogOut.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		buttonLogOut.setBounds(10, 227, 212, 50);
+		panelAuthentication.add(buttonLogOut);
 		frame.getContentPane().setLayout(groupLayout);
 	}
 }
