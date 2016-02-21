@@ -1,18 +1,17 @@
 package usermanagement;
 
 public abstract class User {
-	public static final int USER_PATIENT = 1;
-	public static final int USER_DOCTOR = 2;
-	public static final int USER_NURSE = 3;
-	public static final int USER_GOVERNMENT = 4;
+	private String name;
+	private UserType type;
+	private String password;
 	
-	String name;
-	String type;
-	String division;
-	String password;
-	
-	public User(String name) {
+	public static enum UserType {
+		Doctor, Patient, Nurse, Government
+	}
+		
+	public User(String name, UserType type) {
 		this.name = name;
+		this.type = type;
 	}
 	
 	public abstract boolean canRead(FileParser fp);
