@@ -54,22 +54,42 @@ public class FileParser {
 	    record = sb.toString();
 	}
 	
+	/**
+	 * Returns patient name
+	 * @return
+	 */
 	public String getPatient() {
 		return patient;
 	}
 	
+	/**
+	 * Returns doctor name
+	 * @return
+	 */
 	public String getDoctor() {
 		return doctor;
 	}
 	
+	/**
+	 * Returns nurse name
+	 * @return
+	 */
 	public String getNurse() {
 		return nurse;
 	}
 	
+	/**
+	 * Returns division name
+	 * @return
+	 */
 	public String getDivision() {
 		return division;
 	}
 	
+	/**
+	 * Returns record name
+	 * @return
+	 */
 	public String getRecord() {
 		return record;
 	}

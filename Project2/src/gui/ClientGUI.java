@@ -24,13 +24,17 @@ import javax.swing.border.EtchedBorder;
 import java.awt.FlowLayout;
 import javax.swing.JSeparator;
 import java.awt.Font;
+import java.awt.Toolkit;
 
 public class ClientGUI {
 
-	private JFrame frame;
+	private JFrame frmMdview;
 	private JTextField textFieldUserName;
 	private JPasswordField textFieldPassword;
-	private JTextField textFieldName;
+	private JTextField textFieldPatient;
+	private JTextField textFieldDoctor;
+	private JTextField textFieldNurse;
+	private JTextField textFieldDivision;
 
 	/**
 	 * Launch the application.
@@ -40,7 +44,7 @@ public class ClientGUI {
 			public void run() {
 				try {
 					ClientGUI window = new ClientGUI();
-					window.frame.setVisible(true);
+					window.frmMdview.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -59,10 +63,12 @@ public class ClientGUI {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 701, 597);
-		frame.setMinimumSize(new Dimension(701, 597));
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmMdview = new JFrame();
+		frmMdview.setIconImage(Toolkit.getDefaultToolkit().getImage(ClientGUI.class.getResource("/gui/icon.png")));
+		frmMdview.setTitle("Journalakuten");
+		frmMdview.setBounds(100, 100, 800, 597);
+		frmMdview.setMinimumSize(new Dimension(800, 597));
+		frmMdview.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel panelAuthentication = new JPanel();
 		panelAuthentication.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -72,7 +78,7 @@ public class ClientGUI {
 		
 		JPanel panelRecords = new JPanel();
 		panelRecords.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
+		GroupLayout groupLayout = new GroupLayout(frmMdview.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
@@ -99,12 +105,11 @@ public class ClientGUI {
 		
 		JTextPane textPaneRecord = new JTextPane();
 		textPaneRecord.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		textPaneRecord.setText("Record");
 		
-		textFieldName = new JTextField();
-		textFieldName.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		textFieldName.setText("Namn");
-		textFieldName.setColumns(10);
+		textFieldPatient = new JTextField();
+		textFieldPatient.setToolTipText("Patient's name");
+		textFieldPatient.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		textFieldPatient.setColumns(10);
 		
 		JScrollPane scrollPaneRecords = new JScrollPane();
 		
@@ -114,42 +119,62 @@ public class ClientGUI {
 		JButton buttonDiscard = new JButton("Ignorera \u00E4ndringar");
 		buttonDiscard.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		buttonDiscard.setToolTipText("");
+		
+		textFieldDoctor = new JTextField();
+		textFieldDoctor.setToolTipText("Doctor's name");
+		textFieldDoctor.setFont(new Font("Dialog", Font.PLAIN, 13));
+		textFieldDoctor.setColumns(10);
+		
+		textFieldNurse = new JTextField();
+		textFieldNurse.setToolTipText("Nurse's name");
+		textFieldNurse.setFont(new Font("Dialog", Font.PLAIN, 13));
+		textFieldNurse.setColumns(10);
+		
+		textFieldDivision = new JTextField();
+		textFieldDivision.setToolTipText("Hospital division");
+		textFieldDivision.setFont(new Font("Dialog", Font.PLAIN, 13));
+		textFieldDivision.setColumns(10);
 		GroupLayout gl_panelRecords = new GroupLayout(panelRecords);
 		gl_panelRecords.setHorizontalGroup(
 			gl_panelRecords.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_panelRecords.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(textFieldName, GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
-					.addContainerGap())
 				.addGroup(gl_panelRecords.createSequentialGroup()
-					.addGap(10)
+					.addContainerGap()
 					.addGroup(gl_panelRecords.createParallelGroup(Alignment.LEADING)
+						.addComponent(textPaneRecord, GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
 						.addGroup(gl_panelRecords.createSequentialGroup()
-							.addComponent(textPaneRecord, GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
-							.addContainerGap())
+							.addComponent(buttonSave, GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+							.addGap(12)
+							.addComponent(buttonDiscard, GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE))
+						.addComponent(scrollPaneRecords, GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
 						.addGroup(gl_panelRecords.createSequentialGroup()
-							.addGroup(gl_panelRecords.createParallelGroup(Alignment.TRAILING)
-								.addComponent(scrollPaneRecords, GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
-								.addGroup(gl_panelRecords.createSequentialGroup()
-									.addComponent(buttonSave, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(buttonDiscard, GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)))
-							.addGap(10))))
+							.addComponent(textFieldPatient, GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(textFieldDoctor, GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(textFieldNurse, GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(textFieldDivision, GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)))
+					.addContainerGap())
 		);
 		gl_panelRecords.setVerticalGroup(
 			gl_panelRecords.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelRecords.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(scrollPaneRecords, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(textFieldName, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(textPaneRecord, GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
-					.addGap(18)
+					.addGroup(gl_panelRecords.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panelRecords.createParallelGroup(Alignment.BASELINE)
+							.addComponent(textFieldDoctor, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+							.addComponent(textFieldNurse, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
+						.addComponent(textFieldPatient, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textFieldDivision, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(textPaneRecord, GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+					.addGap(12)
 					.addGroup(gl_panelRecords.createParallelGroup(Alignment.BASELINE)
 						.addComponent(buttonSave, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonDiscard, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
-					.addGap(9))
+					.addContainerGap())
 		);
 		
 		JList listRecords = new JList();
@@ -217,6 +242,6 @@ public class ClientGUI {
 		buttonLogOut.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		buttonLogOut.setBounds(10, 227, 212, 50);
 		panelAuthentication.add(buttonLogOut);
-		frame.getContentPane().setLayout(groupLayout);
+		frmMdview.getContentPane().setLayout(groupLayout);
 	}
 }
