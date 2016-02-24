@@ -18,3 +18,9 @@ Servern sparar ändringar.
 
 Logga ut funktion
 Avsluta funktion
+
+Nya stores:
+ts_doktor1, Alias: doktor1, lösenord: md1pass
+ks_doktor1, Alias: doktor1, lösenord: md1pass
+servertruststore2, Alias:server, lösenord: password
+serverkeystore2, Alias: server, lösenord: password
