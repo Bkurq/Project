@@ -20,7 +20,7 @@ public class Client {
         String host = null;
         int port = -1;
         for (int i = 0; i < args.length; i++) {
-            System.out.println("args[" + i + "] = " + args[i]);
+           System.out.println("args[" + i + "] = " + args[i]);
         }
         if (args.length < 2) {
             System.out.println("USAGE: java client host port");
@@ -43,9 +43,13 @@ public class Client {
                 KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
                 TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
                 SSLContext ctx = SSLContext.getInstance("TLS");
-                ks.load(new FileInputStream("clientkeystore"), password);  // keystore password (storepass)
-				ts.load(new FileInputStream("clienttruststore"), password); // truststore password (storepass);
-				kmf.init(ks, password); // user password (keypass)
+                //ks.load(new FileInputStream("clientkeystore"), password);  // keystore password (storepass)
+                
+                //Laddar keystoren med namn ks_username med userns password.
+                ks.load(new FileInputStream("e:\\Documents\\Skola\\Datasäkerhet\\Project\\Project2\\src\\client\\ks_"+args[2]),args[3].toCharArray()); //keystore password = userpassword
+				ts.load(new FileInputStream("e:\\Documents\\Skola\\Datasäkerhet\\Project\\Project2\\src\\client\\ts_"+args[2]),args[3].toCharArray()); // truststore password (storepass);
+				//kmf.init(ks, password); // user password (keypass)
+				kmf.init(ks,args[3].toCharArray());
 				tmf.init(ts); // keystore can be used as truststore here
 				ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
                 factory = ctx.getSocketFactory();

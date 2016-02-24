@@ -11,8 +11,10 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.AbstractListModel;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.GroupLayout;
@@ -21,10 +23,16 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
+
 import java.awt.FlowLayout;
+
 import javax.swing.JSeparator;
+
+import client.Client;
+
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.io.IOException;
 
 public class ClientGUI {
 
@@ -232,6 +240,17 @@ public class ClientGUI {
 		JButton buttonLogIn = new JButton("Logga in");
 		buttonLogIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				System.out.println(textFieldUserName.getText());
+				System.out.println(textFieldPassword.getText());
+				System.out.println("clientkeystore"+textFieldUserName.getText());
+				//försök köra Client med rätt username
+				String[] clientargs = {"localhost","9876",textFieldUserName.getText(),textFieldPassword.getText()};
+				try {
+					Client.main(clientargs);
+				} catch (Exception e) {
+					//throw new IOException(e.getMessage());
+					System.out.println(e.getMessage());
+				}
 			}
 		});
 		buttonLogIn.setFont(new Font("Segoe UI", Font.PLAIN, 13));
