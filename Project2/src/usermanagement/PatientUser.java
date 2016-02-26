@@ -2,8 +2,8 @@ package usermanagement;
 
 public class PatientUser extends User {
 
-	public PatientUser(String name, UserType type) {
-		super(name, type);
+	public PatientUser(String name) {
+		super(name);
 	}
 
 	@Override

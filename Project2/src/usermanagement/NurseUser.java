@@ -3,8 +3,8 @@ package usermanagement;
 public class NurseUser extends User {
 	private String division;
 
-	public NurseUser(String name, UserType type) {
-		super(name, type);
+	public NurseUser(String name) {
+		super(name);
 	}
 
 	@Override

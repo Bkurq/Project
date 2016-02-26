@@ -2,8 +2,8 @@ package usermanagement;
 
 public class GovernmentUser extends User {
 
-	public GovernmentUser(String name, UserType type) {
-		super(name, type);
+	public GovernmentUser(String name) {
+		super(name);
 	}
 
 	@Override
