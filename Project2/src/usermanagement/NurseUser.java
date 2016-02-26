@@ -1,5 +1,7 @@
 package usermanagement;
 
+import server.FileParser;
+
 public class NurseUser extends User {
 	private String division;
 

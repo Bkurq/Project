@@ -1,5 +1,7 @@
 package usermanagement;
 
+import server.FileParser;
+
 public abstract class User {
 	private String name;
 	private String password;

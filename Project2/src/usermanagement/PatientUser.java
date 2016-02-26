@@ -1,5 +1,7 @@
 package usermanagement;
 
+import server.FileParser;
+
 public class PatientUser extends User {
 
 	public PatientUser(String name) {

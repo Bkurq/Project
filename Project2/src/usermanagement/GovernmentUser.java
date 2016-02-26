@@ -1,5 +1,7 @@
 package usermanagement;
 
+import server.FileParser;
+
 public class GovernmentUser extends User {
 
 	public GovernmentUser(String name) {

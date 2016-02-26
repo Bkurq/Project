@@ -9,6 +9,8 @@ import usermanagement.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import server.FileParser;
+
 public class FileParserTest {
 	private FileParser fp;
 

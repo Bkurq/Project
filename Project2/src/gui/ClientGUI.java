@@ -199,7 +199,11 @@ public class ClientGUI {
 		scrollPaneRecords.setViewportView(listRecords);
 		panelRecords.setLayout(gl_panelRecords);
 		
-		JButton buttonAdd = new JButton("Lägg till");
+		JButton buttonAdd = new JButton("L\u00E4gg till");
+		buttonAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		buttonAdd.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		buttonAdd.setBounds(10, 11, 212, 50);
 		
