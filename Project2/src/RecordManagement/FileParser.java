@@ -5,10 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class FileParser {
-	private File file;
 	private FileReader fileReader;
 	private BufferedReader bufferedReader;
 	private String record;
@@ -19,16 +17,21 @@ public class FileParser {
 	 * @param fileName Name of the file to be read.
 	 * @throws IOException 
 	 */
-	public FileParser(String fileName) throws IOException {
-		file = new File(fileName);
+	public FileParser(File file) {
 		try {
 			fileReader = new FileReader(file);
 			bufferedReader = new BufferedReader(fileReader);
 
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 			System.out.println("File not found: " + file.toString());
 		}
-		readFile();
+		try {
+			readFile();
+		} catch (IOException e) {
+			System.out.println("Error reading the file");
+			e.printStackTrace();
+		}
 	}
 
 	/**

@@ -16,7 +16,7 @@ public class FileParserTest {
 
 	@Before
 	public void setUp() throws Exception {
-		fp = new FileParser("fp.txt");
+		fp = new FileParser(new File("fp.txt"));
 	}
 
 	@Test
