@@ -1,10 +1,9 @@
 package usermanagement;
 
-import server.FileParser;
+import RecordManagement.FileParser;
 
 public abstract class User {
 	private String name;
-	private String password;
 
 	public User(String name) {
 		this.name = name;

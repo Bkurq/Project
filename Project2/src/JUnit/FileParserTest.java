@@ -9,7 +9,7 @@ import usermanagement.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import server.FileParser;
+import RecordManagement.FileParser;
 
 public class FileParserTest {
 	private FileParser fp;
