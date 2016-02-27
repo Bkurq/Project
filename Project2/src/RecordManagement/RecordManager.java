@@ -9,9 +9,9 @@ public class RecordManager {
 	public RecordManager() {
 		records = new ArrayList<FileParser>();
 		File dir = new File("records");
-		File[] dirContents = dir.listFiles();
+		String[] dirContents = dir.list();
 		if(dirContents != null) {
-			for(File file: dirContents) {
+			for(String file: dirContents) {
 				records.add(new FileParser(file));
 			}
 		}

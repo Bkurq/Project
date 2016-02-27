@@ -2,10 +2,6 @@ package JUnit;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
-
-import usermanagement.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +12,7 @@ public class FileParserTest {
 
 	@Before
 	public void setUp() throws Exception {
-		fp = new FileParser(new File("fp.txt"));
+		fp = new FileParser("fp.txt");
 	}
 
 	@Test

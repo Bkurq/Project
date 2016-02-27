@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class FileParser {
+	private String file;
 	private FileReader fileReader;
 	private BufferedReader bufferedReader;
 	private String record;
@@ -17,21 +18,8 @@ public class FileParser {
 	 * @param fileName Name of the file to be read.
 	 * @throws IOException 
 	 */
-	public FileParser(File file) {
-		try {
-			fileReader = new FileReader(file);
-			bufferedReader = new BufferedReader(fileReader);
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("File not found: " + file.toString());
-		}
-		try {
-			readFile();
-		} catch (IOException e) {
-			System.out.println("Error reading the file");
-			e.printStackTrace();
-		}
+	public FileParser(String file) {
+		this.file = file;
 	}
 
 	/**
@@ -42,6 +30,16 @@ public class FileParser {
 	 * @throws IOException 
 	 */
 	private void readFile() throws IOException {
+		try {
+			fileReader = new FileReader(file);
+			bufferedReader = new BufferedReader(fileReader);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			System.out.println("File not found: " + file.toString());
+		} catch (IOException e) {
+			System.out.println("Error reading the file");
+			e.printStackTrace();
+		}
 		patient = bufferedReader.readLine();
 		doctor = bufferedReader.readLine();
 		nurse = bufferedReader.readLine();
