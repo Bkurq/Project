@@ -11,7 +11,7 @@ public class RecordManagerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		File f1 = new File
+
 		RecordManager recordManager = new RecordManager();
 	}
 
