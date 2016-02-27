@@ -1,17 +1,16 @@
 package RecordManagement;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class FileParser {
 	private String file;
-	private FileReader fileReader;
-	private BufferedReader bufferedReader;
-	private String record;
-	private String doctor, nurse, patient, division;
+	private String record, doctor, nurse, patient, division;
 	
 	/**
 	 * Creates a new FileParser that will read from a file
@@ -29,17 +28,9 @@ public class FileParser {
 	 * @param fileName
 	 * @throws IOException 
 	 */
-	private void readFile() throws IOException {
-		try {
-			fileReader = new FileReader(file);
-			bufferedReader = new BufferedReader(fileReader);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("File not found: " + file.toString());
-		} catch (IOException e) {
-			System.out.println("Error reading the file");
-			e.printStackTrace();
-		}
+	public void readFile() throws IOException, FileNotFoundException {
+		FileReader fileReader = new FileReader(file);
+		BufferedReader bufferedReader = new BufferedReader(fileReader);
 		patient = bufferedReader.readLine();
 		doctor = bufferedReader.readLine();
 		nurse = bufferedReader.readLine();
@@ -52,7 +43,21 @@ public class FileParser {
 	        sb.append(System.lineSeparator());
 	        line = bufferedReader.readLine();
 	    }
-	    record = sb.toString();
+	    record = sb.toString().trim();
+	    bufferedReader.close();
+	}
+	
+	/**
+	 * Write to the file overwriting existing data.
+	 * @param args
+	 * @throws IOException, FileNotFoundException 
+	 */
+	public void writeFile(String contents) throws IOException, FileNotFoundException {
+		FileWriter fileWriter = new FileWriter(file);
+		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+		bufferedWriter.write(contents);
+		bufferedWriter.close();
+		fileWriter.close();
 	}
 	
 	/**
