@@ -2,24 +2,13 @@ package RecordManagement;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class FileParser {
-	private String file;
 	private String record, doctor, nurse, patient, division;
-	
-	/**
-	 * Creates a new FileParser that will read from a file
-	 * @param fileName Name of the file to be read.
-	 * @throws IOException 
-	 */
-	public FileParser(String file) {
-		this.file = file;
-	}
 
 	/**
 	 * Reads fileName and puts a name with the correct corresponding
@@ -28,7 +17,7 @@ public class FileParser {
 	 * @param fileName
 	 * @throws IOException 
 	 */
-	public void readFile() throws IOException, FileNotFoundException {
+	public void readFile(String file) throws IOException, FileNotFoundException {
 		FileReader fileReader = new FileReader(file);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 		patient = bufferedReader.readLine();
@@ -52,16 +41,18 @@ public class FileParser {
 	 * @param args
 	 * @throws IOException, FileNotFoundException 
 	 */
-	public void writeFile(String contents) throws IOException, FileNotFoundException {
+	public void writeFile(String file, String[] contents) throws IOException, FileNotFoundException {
 		FileWriter fileWriter = new FileWriter(file);
 		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-		bufferedWriter.write(contents);
+		for(String parameter:contents) {
+			bufferedWriter.write(parameter);
+			bufferedWriter.newLine();
+		}
 		bufferedWriter.close();
-		fileWriter.close();
 	}
 	
 	/**
-	 * Returns patient name
+	 * Returns patient's username
 	 * @return
 	 */
 	public String getPatient() {
@@ -69,7 +60,7 @@ public class FileParser {
 	}
 	
 	/**
-	 * Returns doctor name
+	 * Returns doctor's username
 	 * @return
 	 */
 	public String getDoctor() {
@@ -77,7 +68,7 @@ public class FileParser {
 	}
 	
 	/**
-	 * Returns nurse name
+	 * Returns nurse's username
 	 * @return
 	 */
 	public String getNurse() {
@@ -85,7 +76,7 @@ public class FileParser {
 	}
 	
 	/**
-	 * Returns division name
+	 * Returns division's name
 	 * @return
 	 */
 	public String getDivision() {
@@ -93,10 +84,46 @@ public class FileParser {
 	}
 	
 	/**
-	 * Returns record name
+	 * Returns record's name
 	 * @return
 	 */
 	public String getRecord() {
 		return record;
 	}
+	
+	/**
+	 * @param record the record to set
+	 */
+	public void setRecord(String record) {
+		this.record = record;
+	}
+
+	/**
+	 * @param doctor the doctor to set
+	 */
+	public void setDoctor(String doctor) {
+		this.doctor = doctor;
+	}
+
+	/**
+	 * @param nurse the nurse to set
+	 */
+	public void setNurse(String nurse) {
+		this.nurse = nurse;
+	}
+
+	/**
+	 * @param patient the patient to set
+	 */
+	public void setPatient(String patient) {
+		this.patient = patient;
+	}
+
+	/**
+	 * @param division the division to set
+	 */
+	public void setDivision(String division) {
+		this.division = division;
+	}
+
 }

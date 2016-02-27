@@ -5,14 +5,14 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import RecordManagement.FileParser;
 import RecordManagement.RecordManager;
 
 public class RecordManagerTest {
 
 	@Before
 	public void setUp() throws Exception {
-
-		RecordManager recordManager = new RecordManager();
+		RecordManager recordManager = new RecordManager("records");
 	}
 
 	@Test
