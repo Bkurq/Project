@@ -24,6 +24,7 @@ public class FileParser {
 	public void readFile() {
 		try {
 			FileReader fileReader = new FileReader(filePath);
+			
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			patient = bufferedReader.readLine();
 			doctor = bufferedReader.readLine();
@@ -40,10 +41,10 @@ public class FileParser {
 			record = sb.toString().trim();
 			bufferedReader.close();
 		} catch (FileNotFoundException e) {
-			System.out.println(filePath + "not found");
+			System.out.println(filePath + " not found");
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println(filePath + "could not be loaded");
+			System.out.println(filePath + " could not be loaded");
 			e.printStackTrace();
 		}
 	    
@@ -77,7 +78,7 @@ public class FileParser {
 	
 	/**
 	 * Sets the contents of the file doctor, patient, nurse, division, record without writing to a file
-	 * @param contents
+	 * @param contents String[] containing patient, doctor, nurse, division, record
 	 */
 	public void setContents(String[] contents) {
 		patient = contents[0];

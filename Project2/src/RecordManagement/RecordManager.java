@@ -2,8 +2,6 @@ package RecordManagement;
 
 import java.util.ArrayList;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;;
 
 public class RecordManager {
 	private ArrayList<FileParser> records;
@@ -35,7 +33,7 @@ public class RecordManager {
 		String[] folderContents = folder.list();
 		if(folderContents != null) {
 			for(String filePath: folderContents) {
-				FileParser medicalRecord = new FileParser(filePath);
+				FileParser medicalRecord = new FileParser(directoryPath+"/"+filePath);
 				medicalRecord.readFile();
 				records.add(medicalRecord);
 			}
