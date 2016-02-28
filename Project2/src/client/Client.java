@@ -1,10 +1,13 @@
 package client;
 import java.net.*;
 import java.io.*;
+
+import javax.net.SocketFactory;
 import javax.net.ssl.*;
 import javax.security.cert.X509Certificate;
 import java.security.KeyStore;
 import java.security.cert.*;
+import java.util.Scanner;
 
 /*
  * This example shows how to set up a key manager to perform client
@@ -35,28 +38,29 @@ public class Client {
         }
 
         try { /* set up a key manager for client authentication */
-            SSLSocketFactory factory = null;
-            try {
-                char[] password = "password".toCharArray();
-                KeyStore ks = KeyStore.getInstance("JKS");
-                KeyStore ts = KeyStore.getInstance("JKS");
-                KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-                TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
-                SSLContext ctx = SSLContext.getInstance("TLS");
-                //ks.load(new FileInputStream("clientkeystore"), password);  // keystore password (storepass)
-                
-                //Laddar keystoren med namn ks_username med userns password.
-                ks.load(new FileInputStream("e:\\Documents\\Skola\\Datasäkerhet\\Project\\Project2\\src\\client\\ks_"+args[2]),args[3].toCharArray()); //keystore password = userpassword
-				ts.load(new FileInputStream("e:\\Documents\\Skola\\Datasäkerhet\\Project\\Project2\\src\\client\\ts_"+args[2]),args[3].toCharArray()); // truststore password (storepass);
-				//kmf.init(ks, password); // user password (keypass)
-				kmf.init(ks,args[3].toCharArray());
-				tmf.init(ts); // keystore can be used as truststore here
-				ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
-                factory = ctx.getSocketFactory();
-            } catch (Exception e) {
-                throw new IOException(e.getMessage());
-            }
-            SSLSocket socket = (SSLSocket)factory.createSocket(host, port);
+            //SSLSocketFactory factory = null;
+//            try {
+//                char[] password = "password".toCharArray();
+//                KeyStore ks = KeyStore.getInstance("JKS");
+//                KeyStore ts = KeyStore.getInstance("JKS");
+//                KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+//                TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+//                SSLContext ctx = SSLContext.getInstance("TLS");
+//                //ks.load(new FileInputStream("clientkeystore"), password);  // keystore password (storepass)
+//                
+//                //Laddar keystoren med namn ks_username med userns password.
+//                ks.load(new FileInputStream("e:\\Documents\\Skola\\Datasï¿½kerhet\\Project\\Project2\\src\\client\\ks_"+args[2]),args[3].toCharArray()); //keystore password = userpassword
+//				ts.load(new FileInputStream("e:\\Documents\\Skola\\Datasï¿½kerhet\\Project\\Project2\\src\\client\\ts_"+args[2]),args[3].toCharArray()); // truststore password (storepass);
+//				//kmf.init(ks, password); // user password (keypass)
+//				kmf.init(ks,args[3].toCharArray());
+//				tmf.init(ts); // keystore can be used as truststore here
+//				ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+//                factory = ctx.getSocketFactory();
+//            } catch (Exception e) {
+//                throw new IOException(e.getMessage());
+//            }
+            //SSLSocket socket = (SSLSocket)factory.createSocket(host, port);
+            Socket socket = new Socket("localhost", port);
             System.out.println("\nsocket before handshake:\n" + socket + "\n");
 
             /*
@@ -65,35 +69,34 @@ public class Client {
              * See SSLSocketClient.java for more information about why
              * there is a forced handshake here when using PrintWriters.
              */
-            socket.startHandshake();
-
-            SSLSession session = socket.getSession();
-            X509Certificate cert = (X509Certificate)session.getPeerCertificateChain()[0];
-            String subject = cert.getSubjectDN().getName();
-            System.out.println("certificate name (subject DN field) on certificate received from server:\n" + subject + "\n");
-            System.out.println("socket after handshake:\n" + socket + "\n");
-            System.out.println("secure connection established\n\n");
-
-            BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String msg;
-			for (;;) {
-                System.out.print(">");
-                msg = read.readLine();
-                if (msg.equalsIgnoreCase("quit")) {
-				    break;
-				}
-                System.out.print("sending '" + msg + "' to server...");
-                out.println(msg);
+//            socket.startHandshake();
+//
+//            SSLSession session = socket.getSession();
+//            X509Certificate cert = (X509Certificate)session.getPeerCertificateChain()[0];
+//            String subject = cert.getSubjectDN().getName();
+            
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            Scanner input = new Scanner(System.in);
+            Object message = null;
+            while (true) {
+                System.out.print(">:");
+                String s = input.nextLine();
+                System.out.print("sending '" + s + "' to server...");
+                out.writeObject(s);
                 out.flush();
-                System.out.println("done");
-
-                System.out.println("received '" + in.readLine() + "' from server\n");
+                message = in.readObject();
+                if(message instanceof String) {
+			    	message = (String) message;
+			    	System.out.println("received '" + message + "' from server\n");
+			    	if(message.equals("break"))
+			    		break;
+			    } else {
+			    	System.out.println("Answer not a string");
+			    }
             }
             in.close();
 			out.close();
-			read.close();
             socket.close();
         } catch (Exception e) {
             e.printStackTrace();

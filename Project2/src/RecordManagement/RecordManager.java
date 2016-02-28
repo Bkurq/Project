@@ -19,7 +19,10 @@ public class RecordManager {
 	 * @param oldRecordManager
 	 */
 	public RecordManager(RecordManager oldRecordManager) {
-		System.arraycopy(oldRecordManager.records, 0, records, 0, oldRecordManager.records.size());
+		records = new ArrayList<FileParser>();
+		for(FileParser medicalRecord:oldRecordManager.records) {
+			records.add(medicalRecord);
+		}
 	}
 	
 	
