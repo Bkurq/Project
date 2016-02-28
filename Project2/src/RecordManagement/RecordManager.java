@@ -1,9 +1,6 @@
 package RecordManagement;
 
 import java.util.ArrayList;
-
-import usermanagement.User;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;;
@@ -38,17 +35,9 @@ public class RecordManager {
 		String[] folderContents = folder.list();
 		if(folderContents != null) {
 			for(String filePath: folderContents) {
-				FileParser medicalRecord = new FileParser();
-				try {
-					medicalRecord.readFile(filePath);
-					records.add(medicalRecord);
-				} catch (FileNotFoundException e) {
-					System.out.println(filePath + "not found");
-					e.printStackTrace();
-				} catch (IOException e) {
-					System.out.println(filePath + "could not be loaded");
-					e.printStackTrace();
-				}
+				FileParser medicalRecord = new FileParser(filePath);
+				medicalRecord.readFile();
+				records.add(medicalRecord);
 			}
 		}
 	}
@@ -60,5 +49,11 @@ public class RecordManager {
 	 */
 	public ArrayList<FileParser> getRecords() {
 		return records;
+	}
+	
+	public void writeFiles() {
+		for(FileParser medicalRecord:records) {
+			medicalRecord.writeFile();
+		}
 	}
 }

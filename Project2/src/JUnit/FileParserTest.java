@@ -16,13 +16,13 @@ public class FileParserTest {
 
 	@Before
 	public void setUp() {
-		fp = new FileParser();
+		fp = new FileParser("fp.txt");
 		contents = new String[]{"Patient", "Doctor", "Nurse", "Division", "This is a medical record. Viewer discretion is advised."};
 	}
 
 	@Test
 	public void testReader() throws FileNotFoundException, IOException {
-		fp.readFile("fp.txt");
+		fp.readFile();
 		assertEquals(contents[0], fp.getPatient());
 		assertEquals(contents[1], fp.getDoctor());
 		assertEquals(contents[2], fp.getNurse());
@@ -32,9 +32,11 @@ public class FileParserTest {
 	
 	@Test
 	public void testWriter() throws FileNotFoundException, IOException {
-		fp.writeFile("fp.txt", new String[]{"asdf"});
-		fp.readFile("fp.txt");
+		fp.setContents(new String[]{"asdf", "", "", "", ""});
+		fp.writeFile();
+		fp.readFile();
 		assertEquals("asdf", fp.getPatient());
-		fp.writeFile("fp.txt", contents);
+		fp.setContents(contents);
+		fp.writeFile();
 	}
 }

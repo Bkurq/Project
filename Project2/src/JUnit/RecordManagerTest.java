@@ -9,15 +9,16 @@ import RecordManagement.FileParser;
 import RecordManagement.RecordManager;
 
 public class RecordManagerTest {
+	private RecordManager recordManager;
 
 	@Before
 	public void setUp() throws Exception {
-		RecordManager recordManager = new RecordManager("records");
+		recordManager = new RecordManager("records");
 	}
 
 	@Test
 	public void test() {
-		fail("Not yet implemented");
+		recordManager.getRecords();
 	}
 
 }

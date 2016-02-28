@@ -247,7 +247,7 @@ public class ClientGUI {
 				System.out.println(textFieldUserName.getText());
 				System.out.println(textFieldPassword.getText());
 				System.out.println("clientkeystore"+textFieldUserName.getText());
-				//försök köra Client med rätt username
+				//fï¿½rsï¿½k kï¿½ra Client med rï¿½tt username
 				String[] clientargs = {"localhost","9876",textFieldUserName.getText(),textFieldPassword.getText()};
 				try {
 					Client.main(clientargs);
