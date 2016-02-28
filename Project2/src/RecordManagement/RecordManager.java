@@ -58,17 +58,7 @@ public class RecordManager {
 	 * @param user 
 	 * @return ArrayList containing matching medical records
 	 */
-	public ArrayList<FileParser> search(User user) {
-		ArrayList<FileParser> matchingRecords = new ArrayList<FileParser>();
-		for(FileParser medicalRecord:records) {
-			if(user.canAccess(medicalRecord)) {
-				matchingRecords.add(medicalRecord);
-			}
-		}
-		return matchingRecords;
-	}
-	
-	public void writeRecord() {
-		
+	public ArrayList<FileParser> getRecords() {
+		return records;
 	}
 }
