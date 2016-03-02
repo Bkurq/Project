@@ -9,6 +9,10 @@ public abstract class User {
 		this.userName = userName;
 	}
 	
+	public String getUserName() {
+		return userName;
+	}
+	
 	/**
 	 * Returns true if the user can perform any available action on the record.
 	 * @param fp FileParser containing the record.
@@ -56,4 +60,6 @@ public abstract class User {
 	 * @return
 	 */
 	public abstract boolean canCreate();
+	
+	public abstract String getDivision();
 }

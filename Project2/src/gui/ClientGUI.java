@@ -23,31 +23,26 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListSelectionModel;
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.AbstractTableModel;
 
 import RecordManagement.FileParser;
 import RecordManagement.RecordManager;
-
-import java.awt.FlowLayout;
-
-import javax.swing.JSeparator;
-
 import client.Client;
 import usermanagement.DoctorUser;
+import usermanagement.GovernmentUser;
 import usermanagement.User;
 
 import java.awt.Font;
 import java.awt.Toolkit;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 import java.awt.Color;
+import java.awt.Container;
+
 import javax.swing.UIManager;
-import java.awt.SystemColor;
 
 public class ClientGUI {
 
@@ -87,6 +82,7 @@ public class ClientGUI {
 		recordManager = new RecordManager("records");
 		medicalRecords = new Vector<FileParser>(recordManager.getRecords());
 		user = new DoctorUser("Doctor5", "Division1");
+		//user = new GovernmentUser("Gov5");
 		initialize();
 	}
 
@@ -148,8 +144,25 @@ public class ClientGUI {
 		buttonSave = new JButton("Spara \u00E4ndringar");
 		buttonSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				recordManager.getRecords().get(listRecords.getMaxSelectionIndex()).setRecord(textPaneRecord.getText());
-				resetUIEdit();
+				try {
+					recordManager.getRecords().get(listRecords.getSelectedIndex()).setRecord(textPaneRecord.getText());
+					recordManager.getRecords().get(listRecords.getSelectedIndex()).Log("Edited", user);
+					resetUIEdit();
+				} catch (Exception e1) {
+					if (!textFieldNurse.getText().trim().isEmpty() && !textFieldPatient.getText().trim().isEmpty()) {
+						FileParser p = new FileParser(new Date().toString());
+						recordManager.getRecords().add(p);
+						recordManager.getRecords().get(recordManager.getRecords().size()-1).setDoctor(user.getUserName());
+						recordManager.getRecords().get(recordManager.getRecords().size()-1).setNurse(textFieldNurse.getText());
+						recordManager.getRecords().get(recordManager.getRecords().size()-1).setDivision(user.getDivision());
+						recordManager.getRecords().get(recordManager.getRecords().size()-1).setPatient(textFieldPatient.getText());
+						recordManager.getRecords().get(recordManager.getRecords().size()-1).setRecord(textPaneRecord.getText());
+						recordManager.getRecords().get(recordManager.getRecords().size()-1).Log("Created", user);
+						resetUIEdit();
+					} else {
+						JOptionPane.showMessageDialog(null, "Skriv in patientens och sjuksj�terskans namn", "Fel", JOptionPane.ERROR_MESSAGE);
+					}
+				}
 			}
 		});
 		buttonSave.setForeground(Color.BLACK);
@@ -177,7 +190,7 @@ public class ClientGUI {
 				try {
 					textPaneRecord.setText(medicalRecords.get(listRecords.getMaxSelectionIndex()).getLog());
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Välj en patientjournal", "Fel", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "V�lj en patientjournal", "Fel", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -188,10 +201,19 @@ public class ClientGUI {
 		
 		scrollPaneText = new JScrollPane();
 		
-		buttonDiscard = new JButton("Ignorera ändringar");
+		buttonDiscard = new JButton("Ignorera \u00C4ndringar");
 		buttonDiscard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textPaneRecord.setText(medicalRecords.get(listRecords.getSelectedIndex()).getRecord());
+				try {
+					textPaneRecord.setText(medicalRecords.get(listRecords.getSelectedIndex()).getRecord());
+				} catch (Exception e1) {
+					textFieldDivision.setText("");
+					textFieldDoctor.setText("");
+					textFieldNurse.setText("");
+					textFieldPatient.setText("");
+					textPaneRecord.setText("");
+					resetUIEdit();
+				}
 				resetUIEdit();
 			}
 		});
@@ -261,10 +283,16 @@ public class ClientGUI {
 		buttonAdd.setForeground(Color.BLACK);
 		buttonAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				resetUIEdit();
+				listRecords.clearSelection();
+				buttonSave.setEnabled(true);
+				buttonDiscard.setEnabled(true);
 				textFieldNurse.setEditable(true);
 				textFieldPatient.setEditable(true);
 				textPaneRecord.setEditable(true);
 				textPaneRecord.setBackground(Color.white);
+				textFieldDivision.setText(user.getDivision());
+				textFieldDoctor.setText(user.getUserName());
 			}
 		});
 		buttonAdd.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -287,7 +315,6 @@ public class ClientGUI {
 		buttonRemove = new JButton("Ta bort");
 		buttonRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
 				
 			}
 		});
@@ -339,7 +366,16 @@ public class ClientGUI {
 //					System.out.println(e.getMessage());
 //				}
 				
-				buttonAdd.setEnabled(true);
+				if(user.canDelete()) {
+					buttonRemove.setEnabled(true);
+				} else {
+					buttonRemove.setEnabled(false);
+				}
+				if(user.canCreate()) {
+					buttonAdd.setEnabled(true);
+				} else {
+					buttonAdd.setEnabled(false);
+				}
 			}
 		});
 		buttonLogIn.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -363,6 +399,10 @@ public class ClientGUI {
 		buttonSave.setEnabled(false);
 		textPaneRecord.setEditable(false);
 		textPaneRecord.setBackground(Color.LIGHT_GRAY);
+		textFieldPatient.setEditable(false);
+		textFieldDoctor.setEditable(false);
+		textFieldNurse.setEditable(false);
+		textFieldDivision.setEditable(false);
 	}
 	
 	/**
@@ -384,21 +424,24 @@ public class ClientGUI {
 
 	public void displayRecord(ListSelectionEvent e) {
 		resetUIRecords();
-		ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-		listChangeEnableUI(medicalRecords.get(lsm.getMaxSelectionIndex()));
+		
 		textFieldPatient.setText("");
 		textFieldDoctor.setText("");
 		textFieldNurse.setText("");
 		textFieldDivision.setText("");
 		textPaneRecord.setText("");
-		if (user.canRead(medicalRecords.get(lsm.getMaxSelectionIndex()))) {
-			textFieldPatient.setText(medicalRecords.get(lsm.getMaxSelectionIndex()).getPatient());
-			textFieldDoctor.setText(medicalRecords.get(lsm.getMaxSelectionIndex()).getDoctor());
-			textFieldNurse.setText(medicalRecords.get(lsm.getMaxSelectionIndex()).getNurse());
-			textFieldDivision.setText(medicalRecords.get(lsm.getMaxSelectionIndex()).getDivision());
-			textPaneRecord.setText(medicalRecords.get(lsm.getMaxSelectionIndex()).getRecord());
-		} else {
-			textPaneRecord.setText("Du har ingen rätt att visa den här patientjournalen");
+		if (listRecords.getSelectedIndex() >= 0) {
+			ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+			listChangeEnableUI(medicalRecords.get(lsm.getMaxSelectionIndex()));
+			if (user.canRead(medicalRecords.get(lsm.getMaxSelectionIndex()))) {
+				textFieldPatient.setText(medicalRecords.get(lsm.getMaxSelectionIndex()).getPatient());
+				textFieldDoctor.setText(medicalRecords.get(lsm.getMaxSelectionIndex()).getDoctor());
+				textFieldNurse.setText(medicalRecords.get(lsm.getMaxSelectionIndex()).getNurse());
+				textFieldDivision.setText(medicalRecords.get(lsm.getMaxSelectionIndex()).getDivision());
+				textPaneRecord.setText(medicalRecords.get(lsm.getMaxSelectionIndex()).getRecord());
+			} else {
+				textPaneRecord.setText("Du har ingen rätt att visa den här patientjournalen");
+			}
 		}
 	}
 	
@@ -419,11 +462,6 @@ public class ClientGUI {
 			buttonEdit.setEnabled(true);
 		} else {
 			buttonEdit.setEnabled(false);
-		}
-		if(user.canDelete()) {
-			buttonRemove.setEnabled(true);
-		} else {
-			buttonRemove.setEnabled(false);
 		}
 		if(user.canRecord(fileParser)) {
 			buttonRecord.setEnabled(true);

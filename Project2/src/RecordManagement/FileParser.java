@@ -6,12 +6,18 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Date;
+
+import usermanagement.User;
 
 public class FileParser {
 	private String patient, doctor, nurse, division, record, filePath, log;
 
 	public FileParser(String filePath) {
-		this.filePath = filePath;
+		this.filePath = (filePath.replaceAll(":",""));
 		patient = "";
 		doctor = "";
 		nurse = "";
@@ -71,6 +77,7 @@ public class FileParser {
 	 */
 	public void writeFile() {
 		try {
+			System.out.println(filePath);
 			FileWriter fileWriter = new FileWriter(filePath);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 			bufferedWriter.write(patient);
@@ -114,6 +121,18 @@ public class FileParser {
 		sb.append(log);
 		sb.append(System.lineSeparator());
 		sb.append(string);
+		log = sb.toString();
+	}
+	
+	public void Log(String string, User user) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(log);
+		sb.append(System.lineSeparator());
+		sb.append(string);
+		sb.append(":");
+		sb.append(user.getUserName());
+		sb.append(":");
+		sb.append(new Date().toString());
 		log = sb.toString();
 	}
 	

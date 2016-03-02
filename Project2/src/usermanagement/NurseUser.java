@@ -9,6 +9,10 @@ public class NurseUser extends User {
 		super(name);
 		this.division = division;
 	}
+	
+	public String getDivision() {
+		return division;
+	}
 
 	@Override
 	public boolean canRead(FileParser fp) {
@@ -34,5 +38,6 @@ public class NurseUser extends User {
 	public boolean canCreate() {
 		return false;
 	}
+	
 	
 }

@@ -9,6 +9,10 @@ public class DoctorUser extends User {
 		super(name);
 		this.division = division;
 	}
+	
+	public String getDivision() {
+		return division;
+	}
 
 	@Override
 	public boolean canRead(FileParser fp) {

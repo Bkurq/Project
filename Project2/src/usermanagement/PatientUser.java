@@ -32,5 +32,9 @@ public class PatientUser extends User {
 	public boolean canCreate() {
 		return false;
 	}
+	
+	public String getDivision() {
+		return null;
+	}
 
 }
