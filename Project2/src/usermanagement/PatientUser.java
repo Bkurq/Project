@@ -10,7 +10,7 @@ public class PatientUser extends User {
 
 	@Override
 	public boolean canRead(FileParser fp) {
-		return false;
+		return fp.getPatient().equals(userName);
 	}
 
 	@Override
@@ -20,6 +20,11 @@ public class PatientUser extends User {
 
 	@Override
 	public boolean canDelete(FileParser fp) {
+		return false;
+	}
+
+	@Override
+	public boolean canRecord(FileParser fp) {
 		return false;
 	}
 

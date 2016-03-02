@@ -13,11 +13,13 @@ import RecordManagement.FileParser;
 public class FileParserTest {
 	private FileParser fp;
 	private String[] contents;
+	
+	//run twice, test fails on first try
 
 	@Before
 	public void setUp() {
 		fp = new FileParser("fp.txt");
-		contents = new String[]{"Patient", "Doctor", "Nurse", "Division", "This is a medical record. Viewer discretion is advised."};
+		contents = new String[]{"Patient", "Doctor", "Nurse", "Division", "This is a medical record. Viewer discretion is advised.", "1234 user 1234"};
 	}
 
 	@Test
@@ -28,6 +30,7 @@ public class FileParserTest {
 		assertEquals(contents[2], fp.getNurse());
 		assertEquals(contents[3], fp.getDivision());
 		assertEquals(contents[4], fp.getRecord());
+		assertEquals(contents[5], fp.getLog());
 	}
 	
 	@Test
@@ -37,6 +40,8 @@ public class FileParserTest {
 		fp.readFile();
 		assertEquals("asdf", fp.getPatient());
 		fp.setContents(contents);
+		fp.Log("1234 user 1234");
 		fp.writeFile();
 	}
+	
 }

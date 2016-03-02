@@ -5,22 +5,28 @@ import RecordManagement.FileParser;
 public class NurseUser extends User {
 	private String division;
 
-	public NurseUser(String name) {
+	public NurseUser(String name, String division) {
 		super(name);
+		this.division = division;
 	}
 
 	@Override
 	public boolean canRead(FileParser fp) {
-		return false;
+		return fp.getNurse().equals(userName) || fp.getDivision().equals(division);
 	}
 
 	@Override
 	public boolean canWrite(FileParser fp) {
-		return false;
+		return fp.getNurse().equals(userName);
 	}
 
 	@Override
 	public boolean canDelete(FileParser fp) {
+		return false;
+	}
+
+	@Override
+	public boolean canRecord(FileParser fp) {
 		return false;
 	}
 	

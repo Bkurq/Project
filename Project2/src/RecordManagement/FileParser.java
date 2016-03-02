@@ -8,10 +8,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class FileParser {
-	private String patient, doctor, nurse, division, record, filePath;
-	
+	private String patient, doctor, nurse, division, record, filePath, log;
+
 	public FileParser(String filePath) {
 		this.filePath = filePath;
+		patient = "";
+		doctor = "";
+		nurse = "";
+		division = "";
+		record = "";
+		log = "";
 	}
 
 	/**
@@ -33,12 +39,20 @@ public class FileParser {
 			StringBuilder sb = new StringBuilder();
 			String line = bufferedReader.readLine();
 
-			while (line != null) {
+			while (line != null && !line.equals("#")) {
 				sb.append(line);
 				sb.append(System.lineSeparator());
 				line = bufferedReader.readLine();
 			}
 			record = sb.toString().trim();
+			line = bufferedReader.readLine();
+			sb = new StringBuilder();
+			while(line != null) {
+				sb.append(line);
+				sb.append(System.lineSeparator());
+				line = bufferedReader.readLine();
+			}
+			log = sb.toString().trim();
 			bufferedReader.close();
 		} catch (FileNotFoundException e) {
 			System.out.println(filePath + " not found");
@@ -68,6 +82,9 @@ public class FileParser {
 			bufferedWriter.write(division);
 			bufferedWriter.newLine();
 			bufferedWriter.write(record);
+			bufferedWriter.newLine();
+			bufferedWriter.write("#");
+			bufferedWriter.write(log);
 			bufferedWriter.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -86,7 +103,18 @@ public class FileParser {
 		nurse = contents[2];
 		division = contents[3];
 		record = contents[4];
-		
+	}
+	
+	/**
+	 * Add an entry to log
+	 * @param string
+	 */
+	public void Log(String string) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(log);
+		sb.append(System.lineSeparator());
+		sb.append(string);
+		log = sb.toString();
 	}
 	
 	/**
@@ -176,6 +204,24 @@ public class FileParser {
 	 */
 	public void setDivision(String division) {
 		this.division = division;
+	}
+	
+	/**
+	 * @return the log
+	 */
+	public String getLog() {
+		return log;
+	}
+
+	/**
+	 * @param log the log to set
+	 */
+	public void setLog(String log) {
+		this.log = log;
+	}
+	
+	public String toString() {
+		return filePath;
 	}
 
 }

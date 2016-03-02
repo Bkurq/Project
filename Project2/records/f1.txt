@@ -3,3 +3,5 @@ Doctor1
 Nurse1
 Division1
 This is a medical record. Viewer discretion is advised.1
+#
+fp.Log("1234 user 1234");

@@ -3,7 +3,7 @@ package usermanagement;
 import RecordManagement.FileParser;
 
 public abstract class User {
-	private String userName;
+	protected String userName;
 
 	public User(String userName) {
 		this.userName = userName;
@@ -15,7 +15,7 @@ public abstract class User {
 	 * @return True if user has access. False otherwise.
 	 */
 	public boolean canAccess(FileParser fp) {
-		if(canRead(fp) || canWrite(fp) || canDelete(fp)) {
+		if(canRead(fp) || canWrite(fp) || canDelete(fp) || canRecord(fp)) {
 			return true;
 		} else {
 			return false;
@@ -42,4 +42,11 @@ public abstract class User {
 	 * @return True if user has access. False otherwise.
 	 */
 	public abstract boolean canDelete(FileParser fp);	
+	
+	/**
+	 * Checks if the user can delete the record.
+	 * @param fp
+	 * @return
+	 */
+	public abstract boolean canRecord(FileParser fp);
 }
