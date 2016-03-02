@@ -19,13 +19,18 @@ public class GovernmentUser extends User {
 	}
 
 	@Override
-	public boolean canDelete(FileParser fp) {
+	public boolean canDelete() {
 		return true;
 	}
 	
 	@Override
 	public boolean canRecord(FileParser fp) {
 		return true;
+	}
+	
+	@Override
+	public boolean canCreate() {
+		return false;
 	}
 
 }

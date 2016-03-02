@@ -21,13 +21,18 @@ public class DoctorUser extends User {
 	}
 
 	@Override
-	public boolean canDelete(FileParser fp) {
+	public boolean canDelete() {
 		return false;
 	}
 	
 	@Override
 	public boolean canRecord(FileParser fp) {
 		return false;
+	}
+	
+	@Override
+	public boolean canCreate() {
+		return true;
 	}
 
 }

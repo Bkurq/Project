@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.awt.Color;
 import javax.swing.UIManager;
+import java.awt.SystemColor;
 
 public class ClientGUI {
 
@@ -57,8 +58,10 @@ public class ClientGUI {
 	private JList listRecords;
 	private User user;
 	private JTextPane textPaneRecord;
-	private JButton buttonLogOut, buttonSave, buttonDiscard, buttonRecord, buttonAdd, buttonEdit, buttonRemove, buttonLogIn;
+	private JButton buttonLogOut, buttonSave, buttonRecord, buttonAdd, buttonEdit, buttonRemove, buttonLogIn;
 	private JScrollPane scrollPaneText;
+	private JButton buttonDiscard;
+	private RecordManager recordManager;
 	
 
 	/**
@@ -81,7 +84,7 @@ public class ClientGUI {
 	 * Create the application.
 	 */
 	public ClientGUI() {
-		RecordManager recordManager = new RecordManager("records");
+		recordManager = new RecordManager("records");
 		medicalRecords = new Vector<FileParser>(recordManager.getRecords());
 		user = new DoctorUser("Doctor5", "Division1");
 		initialize();
@@ -143,15 +146,15 @@ public class ClientGUI {
 		JScrollPane scrollPaneRecords = new JScrollPane();
 		
 		buttonSave = new JButton("Spara \u00E4ndringar");
+		buttonSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				recordManager.getRecords().get(listRecords.getMaxSelectionIndex()).setRecord(textPaneRecord.getText());
+				resetUIEdit();
+			}
+		});
 		buttonSave.setForeground(Color.BLACK);
 		buttonSave.setBackground(UIManager.getColor("Button.background"));
 		buttonSave.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		
-		buttonDiscard = new JButton("Ignorera \u00E4ndringar");
-		buttonDiscard.setForeground(Color.BLACK);
-		buttonDiscard.setBackground(UIManager.getColor("Button.background"));
-		buttonDiscard.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		buttonDiscard.setToolTipText("");
 		
 		textFieldDoctor = new JTextField();
 		textFieldDoctor.setToolTipText("Doctor's name");
@@ -172,11 +175,7 @@ public class ClientGUI {
 		buttonRecord.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					if(user.canRecord(medicalRecords.get(listRecords.getMaxSelectionIndex()))) {
-						textPaneRecord.setText(medicalRecords.get(listRecords.getMaxSelectionIndex()).getLog());
-					} else {
-						textPaneRecord.setText("Du har ingen rätt att visa den här loggen");
-					}
+					textPaneRecord.setText(medicalRecords.get(listRecords.getMaxSelectionIndex()).getLog());
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Välj en patientjournal", "Fel", JOptionPane.ERROR_MESSAGE);
 				}
@@ -188,19 +187,32 @@ public class ClientGUI {
 		buttonRecord.setBackground(UIManager.getColor("Button.background"));
 		
 		scrollPaneText = new JScrollPane();
+		
+		buttonDiscard = new JButton("Ignorera ändringar");
+		buttonDiscard.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textPaneRecord.setText(medicalRecords.get(listRecords.getSelectedIndex()).getRecord());
+				resetUIEdit();
+			}
+		});
+		buttonDiscard.setToolTipText("");
+		buttonDiscard.setForeground(Color.BLACK);
+		buttonDiscard.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		buttonDiscard.setEnabled(false);
+		buttonDiscard.setBackground(UIManager.getColor("Button.background"));
 		GroupLayout gl_panelRecords = new GroupLayout(panelRecords);
 		gl_panelRecords.setHorizontalGroup(
-			gl_panelRecords.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_panelRecords.createSequentialGroup()
+			gl_panelRecords.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelRecords.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panelRecords.createParallelGroup(Alignment.LEADING)
 						.addComponent(scrollPaneText, GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)
 						.addGroup(gl_panelRecords.createSequentialGroup()
 							.addComponent(buttonSave, GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(buttonRecord, GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(buttonDiscard, GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE))
+							.addComponent(buttonDiscard, GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+							.addGap(10)
+							.addComponent(buttonRecord, GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE))
 						.addComponent(scrollPaneRecords, GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)
 						.addGroup(gl_panelRecords.createSequentialGroup()
 							.addComponent(textFieldPatient, GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
@@ -227,26 +239,20 @@ public class ClientGUI {
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(scrollPaneText, GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_panelRecords.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_panelRecords.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panelRecords.createParallelGroup(Alignment.BASELINE)
 							.addComponent(buttonSave, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-							.addComponent(buttonDiscard, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
-						.addComponent(buttonRecord, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
+							.addComponent(buttonRecord, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
+						.addComponent(buttonDiscard, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap())
 		);
 		
 		textPaneRecord = new JTextPane();
 		scrollPaneText.setViewportView(textPaneRecord);
 		textPaneRecord.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		listRecords = new JList(medicalRecords);
-		listRecords.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		listRecords.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		ListSelectionModel listSelectionModel = listRecords.getSelectionModel();
-        listSelectionModel.addListSelectionListener(new ListSelectionListener() {
-	        public void valueChanged(ListSelectionEvent e) {
-	        	displayRecord(e);
-	        }
-	    });
+		
+		initList();
+		
 		scrollPaneRecords.setViewportView(listRecords);
 		panelRecords.setLayout(gl_panelRecords);
 		
@@ -255,18 +261,36 @@ public class ClientGUI {
 		buttonAdd.setForeground(Color.BLACK);
 		buttonAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				textFieldNurse.setEditable(true);
+				textFieldPatient.setEditable(true);
+				textPaneRecord.setEditable(true);
+				textPaneRecord.setBackground(Color.white);
 			}
 		});
 		buttonAdd.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		buttonAdd.setBounds(10, 11, 212, 50);
 		
 		buttonEdit = new JButton("Redigera");
+		buttonEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textPaneRecord.setEditable(true);
+				buttonSave.setEnabled(true);
+				buttonDiscard.setEnabled(true);
+				textPaneRecord.setBackground(Color.WHITE);
+			}
+		});
 		buttonEdit.setForeground(Color.BLACK);
 		buttonEdit.setBackground(UIManager.getColor("Button.background"));
 		buttonEdit.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		buttonEdit.setBounds(10, 72, 212, 50);
 		
 		buttonRemove = new JButton("Ta bort");
+		buttonRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+			}
+		});
 		buttonRemove.setForeground(Color.BLACK);
 		buttonRemove.setBackground(UIManager.getColor("Button.background"));
 		buttonRemove.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -315,6 +339,7 @@ public class ClientGUI {
 //					System.out.println(e.getMessage());
 //				}
 				
+				buttonAdd.setEnabled(true);
 			}
 		});
 		buttonLogIn.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -328,16 +353,39 @@ public class ClientGUI {
 		buttonLogOut.setBounds(10, 227, 212, 50);
 		panelAuthentication.add(buttonLogOut);
 		frmMdview.getContentPane().setLayout(groupLayout);
+		
+		resetUIRecords();
 		buttonAdd.setEnabled(false);
+	}
+
+	private void resetUIEdit() {
+		buttonDiscard.setEnabled(false);
+		buttonSave.setEnabled(false);
+		textPaneRecord.setEditable(false);
+		textPaneRecord.setBackground(Color.LIGHT_GRAY);
+	}
+	
+	/**
+	 * Resets all ui elements related to medical records
+	 */
+	private void resetUIRecords() {
 		buttonRemove.setEnabled(false);
 		buttonEdit.setEnabled(false);
 		buttonSave.setEnabled(false);
+		buttonRecord.setEnabled(false);
 		buttonDiscard.setEnabled(false);
+		textPaneRecord.setEditable(false);
+		textPaneRecord.setBackground(Color.LIGHT_GRAY);
+		textFieldPatient.setEditable(false);
+		textFieldDoctor.setEditable(false);
+		textFieldNurse.setEditable(false);
+		textFieldDivision.setEditable(false);
 	}
 
 	public void displayRecord(ListSelectionEvent e) {
+		resetUIRecords();
 		ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-		listChangeEnableButtons(medicalRecords.get(lsm.getMaxSelectionIndex()));
+		listChangeEnableUI(medicalRecords.get(lsm.getMaxSelectionIndex()));
 		textFieldPatient.setText("");
 		textFieldDoctor.setText("");
 		textFieldNurse.setText("");
@@ -353,18 +401,38 @@ public class ClientGUI {
 			textPaneRecord.setText("Du har ingen rätt att visa den här patientjournalen");
 		}
 	}
+	
+	private void initList() {
+		listRecords = new JList(medicalRecords);
+		listRecords.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		listRecords.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		ListSelectionModel listSelectionModel = listRecords.getSelectionModel();
+        listSelectionModel.addListSelectionListener(new ListSelectionListener() {
+	        public void valueChanged(ListSelectionEvent e) {
+	        	displayRecord(e);
+	        }
+	    });
+	}
 
-	private void listChangeEnableButtons(FileParser fileParser) {
+	private void listChangeEnableUI(FileParser fileParser) {
 		if(user.canWrite(fileParser)) {
 			buttonEdit.setEnabled(true);
 		} else {
 			buttonEdit.setEnabled(false);
 		}
-		if(user.canDelete(fileParser)) {
-			buttonRemove.setEnabled(false);
+		if(user.canDelete()) {
+			buttonRemove.setEnabled(true);
 		} else {
 			buttonRemove.setEnabled(false);
 		}
+		if(user.canRecord(fileParser)) {
+			buttonRecord.setEnabled(true);
+		} else {
+			buttonRecord.setEnabled(false);
+		}
+		buttonSave.setEnabled(false);
+		buttonDiscard.setEnabled(false);
 		
 	}
+	
 }

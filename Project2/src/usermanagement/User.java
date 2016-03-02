@@ -15,7 +15,7 @@ public abstract class User {
 	 * @return True if user has access. False otherwise.
 	 */
 	public boolean canAccess(FileParser fp) {
-		if(canRead(fp) || canWrite(fp) || canDelete(fp) || canRecord(fp)) {
+		if(canRead(fp) || canWrite(fp) || canDelete() || canRecord(fp)) {
 			return true;
 		} else {
 			return false;
@@ -41,7 +41,7 @@ public abstract class User {
 	 * @param fp FileParser containing the record.
 	 * @return True if user has access. False otherwise.
 	 */
-	public abstract boolean canDelete(FileParser fp);	
+	public abstract boolean canDelete();	
 	
 	/**
 	 * Checks if the user can delete the record.
@@ -49,4 +49,11 @@ public abstract class User {
 	 * @return
 	 */
 	public abstract boolean canRecord(FileParser fp);
+	
+	/**
+	 * Checks if the user can create the record
+	 * @param fp
+	 * @return
+	 */
+	public abstract boolean canCreate();
 }
