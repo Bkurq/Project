@@ -20,9 +20,9 @@ public class RecordManagerTest {
 	
 	private String recordToString(RecordManager recordManager, int index) {
 		ArrayList<FileParser> records = recordManager.getRecords();
-		return records.get(index).getPatient() + "\n" + records.get(index).getDoctor() + 
-				"\n" + records.get(index).getNurse() + "\n" + records.get(index).getDivision() + 
-				"\n" + records.get(index).getRecord() + "\n" + records.get(index).getLog();
+		return records.get(index).getRecord().getPatient() + "\n" + records.get(index).getRecord().getDoctor() + 
+				"\n" + records.get(index).getRecord().getNurse() + "\n" + records.get(index).getRecord().getDivision() + 
+				"\n" + records.get(index).getRecord().getRecord();
 	}
 
 	@Test
