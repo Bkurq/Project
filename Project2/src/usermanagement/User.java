@@ -1,6 +1,6 @@
 package usermanagement;
 
-import recordManagement.FileParser;
+import recordManagement.Record;
 
 public abstract class User {
 	protected String userName;
@@ -14,31 +14,18 @@ public abstract class User {
 	}
 	
 	/**
-	 * Returns true if the user can perform any available action on the record.
-	 * @param fp FileParser containing the record.
-	 * @return True if user has access. False otherwise.
-	 */
-	public boolean canAccess(FileParser fp) {
-		if(canRead(fp) || canWrite(fp) || canDelete() || canRecord(fp)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	/**
 	 * Checks if the user can read the record.
 	 * @param fp FileParser containing the record.
 	 * @return True if user has access. False otherwise.
 	 */
-	public abstract boolean canRead(FileParser fp);
+	public abstract boolean canRead(Record record);
 	
 	/**
 	 * Checks if the user can write to the record.
 	 * @param fp FileParser containing the record.
 	 * @return True if user has access. False otherwise.
 	 */
-	public abstract boolean canWrite(FileParser fp);
+	public abstract boolean canWrite(Record record);
 	
 	/**
 	 * Checks if the user can delete the record.
@@ -52,10 +39,10 @@ public abstract class User {
 	 * @param fp
 	 * @return
 	 */
-	public abstract boolean canRecord(FileParser fp);
+	public abstract boolean canRecord(Record record);
 	
 	/**
-	 * Checks if the user can create the record
+	 * Checks if the user can create a record
 	 * @param fp
 	 * @return
 	 */

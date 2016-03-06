@@ -1,6 +1,7 @@
 package usermanagement;
 
 import recordManagement.FileParser;
+import recordManagement.Record;
 
 public class DoctorUser extends User {
 	private String division;
@@ -15,13 +16,13 @@ public class DoctorUser extends User {
 	}
 
 	@Override
-	public boolean canRead(FileParser fp) {
-		return fp.getDoctor().equals(userName) || fp.getDivision().equals(division);
+	public boolean canRead(Record record) {
+		return record.getDoctor().equals(userName) || record.getDivision().equals(division);
 	}
 
 	@Override
-	public boolean canWrite(FileParser fp) {
-		return fp.getDoctor().equals(userName);
+	public boolean canWrite(Record record) {
+		return record.getDoctor().equals(userName);
 	}
 
 	@Override
@@ -30,7 +31,7 @@ public class DoctorUser extends User {
 	}
 	
 	@Override
-	public boolean canRecord(FileParser fp) {
+	public boolean canRecord(Record record) {
 		return false;
 	}
 	

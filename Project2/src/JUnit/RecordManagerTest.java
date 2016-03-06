@@ -15,7 +15,7 @@ public class RecordManagerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		recordManager = new RecordManager("records");
+		recordManager = new RecordManager("src/server/records");
 	}
 	
 	private String recordToString(RecordManager recordManager, int index) {
@@ -37,19 +37,4 @@ public class RecordManagerTest {
 			assert(false);
 		}
 	}
-	
-	@Test
-	public void testCopy() {
-		RecordManager recordManager2 = new RecordManager(recordManager);
-		try {
-			System.out.println(recordToString(recordManager2, 0));
-			System.out.println();
-			System.out.println(recordToString(recordManager2, 1));
-			assert(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-			assert(false);
-		}
-	}
-
 }

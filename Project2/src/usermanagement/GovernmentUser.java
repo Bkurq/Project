@@ -1,6 +1,7 @@
 package usermanagement;
 
 import recordManagement.FileParser;
+import recordManagement.Record;
 
 public class GovernmentUser extends User {
 
@@ -9,12 +10,12 @@ public class GovernmentUser extends User {
 	}
 
 	@Override
-	public boolean canRead(FileParser fp) {
+	public boolean canRead(Record record) {
 		return true;
 	}
 
 	@Override
-	public boolean canWrite(FileParser fp) {
+	public boolean canWrite(Record record) {
 		return false;
 	}
 
@@ -24,7 +25,7 @@ public class GovernmentUser extends User {
 	}
 	
 	@Override
-	public boolean canRecord(FileParser fp) {
+	public boolean canRecord(Record record) {
 		return true;
 	}
 	
