@@ -3,5 +3,3 @@ Doctor
 Nurse
 Division
 This is a medical record. Viewer discretion is advised.
-#
-1234 user 1234

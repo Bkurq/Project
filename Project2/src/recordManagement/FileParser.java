@@ -6,24 +6,17 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Date;
-
-import usermanagement.User;
-
 public class FileParser {
-	private filePath;
+	private String filePath;
+	private Record record;
 
-	public FileParser(String filePath) {
+	public FileParser(String filePath, Record record) {
 		this.filePath = (filePath.replaceAll(":",""));
+		this.record = record;
 	}
 
 	/**
-	 * Reads fileName and puts a name with the correct corresponding
-	 * startNumber.
-	 * 
+	 * Reads fileName and puts a name with the correct corresponding startNumber.
 	 * @param fileName
 	 * @throws IOException 
 	 */
@@ -31,19 +24,19 @@ public class FileParser {
 		try {
 			FileReader fileReader = new FileReader(filePath);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
-			patient = bufferedReader.readLine();
-			doctor = bufferedReader.readLine();
-			nurse = bufferedReader.readLine();
-			division = bufferedReader.readLine();
+			record.setPatient(bufferedReader.readLine());
+			record.setDoctor(bufferedReader.readLine());
+			record.setNurse(bufferedReader.readLine());
+			record.setDivision(bufferedReader.readLine());
 			StringBuilder sb = new StringBuilder();
 			String line = bufferedReader.readLine();
 
-			while (line != null && !line.equals("#")) {
+			while (line != null) {
 				sb.append(line);
 				sb.append(System.lineSeparator());
 				line = bufferedReader.readLine();
 			}
-			record = sb.toString().trim();
+			record.setRecord(sb.toString().trim());
 			bufferedReader.close();
 		} catch (FileNotFoundException e) {
 			System.out.println(filePath + " not found");
@@ -62,21 +55,17 @@ public class FileParser {
 	 */
 	public void writeFile() {
 		try {
-			System.out.println(filePath);
 			FileWriter fileWriter = new FileWriter(filePath);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-			bufferedWriter.write(patient);
+			bufferedWriter.write(record.getPatient());
 			bufferedWriter.newLine();
-			bufferedWriter.write(doctor);
+			bufferedWriter.write(record.getDoctor());
 			bufferedWriter.newLine();
-			bufferedWriter.write(nurse);
+			bufferedWriter.write(record.getNurse());
 			bufferedWriter.newLine();
-			bufferedWriter.write(division);
+			bufferedWriter.write(record.getDivision());
 			bufferedWriter.newLine();
-			bufferedWriter.write(record);
-			bufferedWriter.newLine();
-			bufferedWriter.write("#");
-			bufferedWriter.write(log);
+			bufferedWriter.write(record.getRecord());
 			bufferedWriter.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -92,13 +81,8 @@ public class FileParser {
 	public String getFilePath() {
 		return filePath;
 	}
-
-	/**
-	 * @param filePath the filePath to set
-	 */
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
+	
+	public Record getRecord() {
+		return record;
 	}
-
-
 }

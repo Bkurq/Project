@@ -36,7 +36,7 @@ public class RecordManager {
 		String[] folderContents = folder.list();
 		if(folderContents != null) {
 			for(String filePath: folderContents) {
-				FileParser medicalRecord = new FileParser(directoryPath+"/"+filePath);
+				FileParser medicalRecord = new FileParser(directoryPath+"/"+filePath, new Record());
 				medicalRecord.readFile();
 				records.add(medicalRecord);
 			}
