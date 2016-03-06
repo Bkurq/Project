@@ -1,4 +1,4 @@
-package RecordManagement;
+package recordManagement;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,7 +14,7 @@ import java.util.Date;
 import usermanagement.User;
 
 public class FileParser {
-	private String patient, doctor, nurse, division, record, filePath, log;
+	private String patient, doctor, nurse, division, record, filePath;
 
 	public FileParser(String filePath) {
 		this.filePath = (filePath.replaceAll(":",""));
@@ -23,7 +23,6 @@ public class FileParser {
 		nurse = "";
 		division = "";
 		record = "";
-		log = "";
 	}
 
 	/**

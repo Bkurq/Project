@@ -27,9 +27,9 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import RecordManagement.FileParser;
-import RecordManagement.RecordManager;
 import client.Client;
+import recordManagement.FileParser;
+import recordManagement.RecordManager;
 import usermanagement.DoctorUser;
 import usermanagement.GovernmentUser;
 import usermanagement.User;
@@ -160,13 +160,13 @@ public class ClientGUI {
 						recordManager.getRecords().get(recordManager.getRecords().size()-1).Log("Created", user);
 						resetUIEdit();
 					} else {
-						JOptionPane.showMessageDialog(null, "Skriv in patientens och sjuksjöterskans namn", "Fel", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Skriv in patientens och sjuksjï¿½terskans namn", "Fel", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
 		});
 		buttonSave.setForeground(Color.BLACK);
-		buttonSave.setBackground(UIManager.getColor("Button.background"));
+		buttonSave.setBackground(new Color(255, 250, 250));
 		buttonSave.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		
 		textFieldDoctor = new JTextField();
@@ -190,14 +190,14 @@ public class ClientGUI {
 				try {
 					textPaneRecord.setText(medicalRecords.get(listRecords.getMaxSelectionIndex()).getLog());
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Välj en patientjournal", "Fel", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Vï¿½lj en patientjournal", "Fel", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 		buttonRecord.setToolTipText("");
 		buttonRecord.setForeground(Color.BLACK);
 		buttonRecord.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		buttonRecord.setBackground(UIManager.getColor("Button.background"));
+		buttonRecord.setBackground(new Color(255, 250, 250));
 		
 		scrollPaneText = new JScrollPane();
 		
@@ -221,7 +221,7 @@ public class ClientGUI {
 		buttonDiscard.setForeground(Color.BLACK);
 		buttonDiscard.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		buttonDiscard.setEnabled(false);
-		buttonDiscard.setBackground(UIManager.getColor("Button.background"));
+		buttonDiscard.setBackground(new Color(255, 250, 250));
 		GroupLayout gl_panelRecords = new GroupLayout(panelRecords);
 		gl_panelRecords.setHorizontalGroup(
 			gl_panelRecords.createParallelGroup(Alignment.LEADING)
@@ -279,7 +279,7 @@ public class ClientGUI {
 		panelRecords.setLayout(gl_panelRecords);
 		
 		buttonAdd = new JButton("L\u00E4gg till");
-		buttonAdd.setBackground(UIManager.getColor("Button.background"));
+		buttonAdd.setBackground(new Color(255, 250, 250));
 		buttonAdd.setForeground(Color.BLACK);
 		buttonAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -308,7 +308,7 @@ public class ClientGUI {
 			}
 		});
 		buttonEdit.setForeground(Color.BLACK);
-		buttonEdit.setBackground(UIManager.getColor("Button.background"));
+		buttonEdit.setBackground(new Color(255, 250, 250));
 		buttonEdit.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		buttonEdit.setBounds(10, 72, 212, 50);
 		
@@ -319,7 +319,7 @@ public class ClientGUI {
 			}
 		});
 		buttonRemove.setForeground(Color.BLACK);
-		buttonRemove.setBackground(UIManager.getColor("Button.background"));
+		buttonRemove.setBackground(new Color(255, 250, 250));
 		buttonRemove.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		buttonRemove.setBounds(10, 133, 212, 50);
 		panelAction.setLayout(null);
@@ -376,6 +376,8 @@ public class ClientGUI {
 				} else {
 					buttonAdd.setEnabled(false);
 				}
+				buttonLogOut.setEnabled(true);
+				buttonLogIn.setEnabled(false);
 			}
 		});
 		buttonLogIn.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -383,13 +385,20 @@ public class ClientGUI {
 		panelAuthentication.add(buttonLogIn);
 		
 		buttonLogOut = new JButton("Logga ut");
+		buttonLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buttonLogIn.setEnabled(true);
+				buttonLogOut.setEnabled(false);
+				resetUIRecords();
+			}
+		});
 		buttonLogOut.setBackground(new Color(250, 128, 114));
 		buttonLogOut.setForeground(new Color(255, 255, 255));
 		buttonLogOut.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		buttonLogOut.setBounds(10, 227, 212, 50);
 		panelAuthentication.add(buttonLogOut);
 		frmMdview.getContentPane().setLayout(groupLayout);
-		
+		buttonLogOut.setEnabled(false);
 		resetUIRecords();
 		buttonAdd.setEnabled(false);
 	}

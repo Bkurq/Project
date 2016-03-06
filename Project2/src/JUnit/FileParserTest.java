@@ -8,7 +8,7 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import RecordManagement.FileParser;
+import recordManagement.FileParser;
 
 public class FileParserTest {
 	private FileParser fp;

@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import RecordManagement.FileParser;
-import RecordManagement.RecordManager;
+import recordManagement.FileParser;
+import recordManagement.RecordManager;
 
 public class RecordManagerTest {
 	private RecordManager recordManager;

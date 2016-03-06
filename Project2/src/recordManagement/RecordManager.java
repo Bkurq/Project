@@ -1,4 +1,4 @@
-package RecordManagement;
+package recordManagement;
 
 import java.util.ArrayList;
 import java.io.File;
@@ -51,6 +51,7 @@ public class RecordManager {
 	public ArrayList<FileParser> getRecords() {
 		return records;
 	}
+	
 	
 	public void writeFiles() {
 		for(FileParser medicalRecord:records) {

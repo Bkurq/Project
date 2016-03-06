@@ -1,6 +1,6 @@
 package usermanagement;
 
-import RecordManagement.FileParser;
+import recordManagement.FileParser;
 
 public abstract class User {
 	protected String userName;
