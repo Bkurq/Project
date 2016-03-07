@@ -1,6 +1,9 @@
 package recordManagement;
 
 import java.util.ArrayList;
+
+import usermanagement.User;
+
 import java.io.File;
 
 public class RecordManager {
@@ -13,18 +16,6 @@ public class RecordManager {
 	public RecordManager(String directoryPath) {
 		readFiles(directoryPath);
 	}
-	
-	/**
-	 * Create new RecordManager as a deep copy of oldRecordManager
-	 * @param oldRecordManager
-	 */
-	public RecordManager(RecordManager oldRecordManager) {
-		records = new ArrayList<FileParser>();
-		for(FileParser medicalRecord:oldRecordManager.records) {
-			records.add(medicalRecord);
-		}
-	}
-	
 	
 	/**
 	 * Read all records on the server
@@ -48,11 +39,20 @@ public class RecordManager {
 	 * @param user 
 	 * @return ArrayList containing matching medical records
 	 */
-	public ArrayList<FileParser> getRecords() {
-		return records;
+	public ArrayList<Record> getRecords(User user) {
+		ArrayList<Record> matchingRecords = new ArrayList<Record>();
+		for(FileParser fp:records) {
+			Record record = fp.getRecord();
+			if(user.canRead(record)) {
+				matchingRecords.add(record);
+			}
+		}
+		return matchingRecords;
 	}
 	
-	
+	/**
+	 * Write records to hard drive
+	 */
 	public void writeFiles() {
 		for(FileParser medicalRecord:records) {
 			medicalRecord.writeFile();

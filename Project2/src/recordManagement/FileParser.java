@@ -82,6 +82,10 @@ public class FileParser {
 		return filePath;
 	}
 	
+	public void setRecord(Record record) {
+		this.record = record;
+	}
+	
 	public Record getRecord() {
 		return record;
 	}

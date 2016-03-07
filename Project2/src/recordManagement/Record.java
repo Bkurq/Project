@@ -1,14 +1,24 @@
 package recordManagement;
 
+import java.io.Serializable;
+
 /**
  * Class Record is a container class that allows other classes to handle medical records.
  * @author bert
  *
  */
-public class Record {
-	private String patient, doctor, nurse, division, record;
+public class Record implements Serializable {
+	private String patient, doctor, nurse, division, medicalRecord;
 	
 	public Record() {
+	}
+	
+	public Record(Record record) {
+		patient = record.patient;
+		doctor = record.doctor;
+		nurse = record.nurse;
+		division = record.division;
+		medicalRecord = record.medicalRecord;
 	}
 	
 	/**
@@ -20,7 +30,7 @@ public class Record {
 		doctor = contents[1];
 		nurse = contents[2];
 		division = contents[3];
-		record = contents[4];
+		medicalRecord = contents[4];
 	}
 	
 	
@@ -61,14 +71,14 @@ public class Record {
 	 * @return
 	 */
 	public String getRecord() {
-		return record;
+		return medicalRecord;
 	}
 	
 	/**
 	 * @param record the record to set
 	 */
 	public void setRecord(String record) {
-		this.record = record;
+		this.medicalRecord = record;
 	}
 
 	/**
