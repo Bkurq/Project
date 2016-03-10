@@ -35,7 +35,7 @@ public class GovernmentUser extends User {
 	}
 	
 	public String getDivision() {
-		return null;
+		return "";
 	}
 
 }

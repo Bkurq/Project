@@ -89,4 +89,15 @@ public class FileParser {
 	public Record getRecord() {
 		return record;
 	}
+	
+	public boolean equals(Object object) {
+		if(object == null)
+			return false;
+		if(!(object instanceof FileParser))
+			return false;
+		FileParser fp = (FileParser) object;
+		if(fp.getRecord().equals(record))
+			return true;
+		return false;
+	}
 }

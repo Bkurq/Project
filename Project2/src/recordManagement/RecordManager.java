@@ -1,6 +1,7 @@
 package recordManagement;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import usermanagement.User;
 
@@ -8,12 +9,17 @@ import java.io.File;
 
 public class RecordManager {
 	private ArrayList<FileParser> records;
+	private String directoryPath;
+	private Log log;
 	
 	/**
 	 * Create new RecordManager with directoryPath as the directory containing records
 	 * @param directoryPath
 	 */
-	public RecordManager(String directoryPath) {
+	public RecordManager(String directoryPath, Log log) {
+		this.directoryPath = directoryPath;
+		this.log = log;
+		log.readFile();
 		readFiles(directoryPath);
 	}
 	
@@ -41,13 +47,34 @@ public class RecordManager {
 	 */
 	public ArrayList<Record> getRecords(User user) {
 		ArrayList<Record> matchingRecords = new ArrayList<Record>();
+		int index = 0;
 		for(FileParser fp:records) {
 			Record record = fp.getRecord();
 			if(user.canRead(record)) {
+				record.setIndex(index);
 				matchingRecords.add(record);
 			}
+			index++;
 		}
 		return matchingRecords;
+	}
+	
+	public boolean update(User user, Record record) {
+		if(user.canWrite(record)) {
+			records.get(record.getIndex()).getRecord().setRecord(record.getRecord());
+			log.log("Edit " + records.get(record.getIndex()).getFilePath(), user);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean addNewRecord(User user, Record record) {
+		if(user.canCreate()) {
+			records.add(new FileParser(new Date().toString(), record));
+			log.log("Create " + records.get(records.size()-1).getFilePath(), user);
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -57,5 +84,6 @@ public class RecordManager {
 		for(FileParser medicalRecord:records) {
 			medicalRecord.writeFile();
 		}
+		log.writeFile();
 	}
 }

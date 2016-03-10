@@ -15,6 +15,7 @@ public class Log {
 
 	public Log(String filePath) {
 		this.filePath = filePath;
+		log = "";
 	}
 	
 	public void readFile() {
@@ -43,7 +44,7 @@ public class Log {
 	 * @param string
 	 * @param user
 	 */
-	public void Log(String string, User user) {
+	public void log(String string, User user) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(log);
 		sb.append(System.lineSeparator());
@@ -69,5 +70,8 @@ public class Log {
 
 	}
 	
+	public String getLog() {
+		return log;
+	}
 	
 }

@@ -2,66 +2,87 @@ package server;
 import java.io.*;
 import java.net.*;
 import java.security.KeyStore;
+import java.util.ArrayList;
+
 import javax.net.*;
 import javax.net.ssl.*;
 import javax.security.cert.X509Certificate;
 
+import recordManagement.Log;
 import recordManagement.Record;
 import recordManagement.RecordManager;
+import usermanagement.DoctorUser;
 import usermanagement.PatientUser;
 import usermanagement.User;
 
 public class Server implements Runnable {
     private ServerSocket serverSocket = null;
     private RecordManager recordManager;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
+    private Log log;
+    private ArrayList<Record> sent;
+    private User user;
 
     public Server(ServerSocket ss) throws IOException {
-    	recordManager = new RecordManager("src/server/records");
+    	log = new Log("log.txt");
+    	recordManager = new RecordManager("records", log);
+    	user = user = new DoctorUser("Doctor5", "Division1");
         serverSocket = ss;
         newListener();
     }
 
     public void run() {
 		while (true) {
+			Socket socket;
 			try {
 				// SSLSocket socket=(SSLSocket)serverSocket.accept();
 				// SSLSession session = socket.getSession();
 				// X509Certificate cert =
 				// (X509Certificate)session.getPeerCertificateChain()[0];
 				// String subject = cert.getSubjectDN().getName();
-				Socket socket = serverSocket.accept();
+				socket = serverSocket.accept();
 				System.out.println("client connected");
 				// System.out.println("client name (cert subject DN field): " +
 				// subject);
 
-				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-				ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+				out = new ObjectOutputStream(socket.getOutputStream());
+				in = new ObjectInputStream(socket.getInputStream());
 
 				Object message = null;
-				while ((message = in.readObject()) != null) {
+				while (true) {
 					if (message instanceof String) {
 						message = (String) message;
+						if(message.equals("getrecords")) {
+							sent = recordManager.getRecords(user);
+							out.writeObject(sent);
+						} else if(message.equals("saverecord")) {
+							Record record = (Record) in.readObject();
+							recordManager.update(user, record);
+						} else if(message.equals("savenewrecord")) {
+							Record record = (Record) in.readObject();
+							recordManager.addNewRecord(user, record);
+						} else if(message.equals("getlog")) {
+							out.writeObject(log.getLog());
+						} else if(message.equals("logupdate")) {
+							log.log((String)in.readObject(), user);
+						} else if(message.equals("end")) {
+							break;
+						}
 					}
-					System.out.println("received " + message + " from client");
-					System.out.print("sending " + message + " to client...");
-					if (message.equals("files")) {
-						out.writeObject(recordManager.getRecords(new PatientUser("Patient1")));
-					} else {
-						out.writeObject(message);
-					}
-					out.flush();
-					System.out.println("done\n");
+					recordManager.writeFiles();
 				}
 				in.close();
 				out.close();
 				socket.close();
-				System.out.println("client disconnected");
 			} catch (IOException e) {
 				System.out.println("Client died: " + e.getMessage());
 				e.printStackTrace();
-				return;
 			} catch (ClassNotFoundException e) {
 				System.out.println("Class not found");
+				e.printStackTrace();
+			} catch (Exception e) {
+				System.out.println("A pirate be messing with da server");
 				e.printStackTrace();
 			}
 		}

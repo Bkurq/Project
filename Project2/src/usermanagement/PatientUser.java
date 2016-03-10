@@ -35,7 +35,7 @@ public class PatientUser extends User {
 	}
 	
 	public String getDivision() {
-		return null;
+		return "";
 	}
 
 }

@@ -8,6 +8,7 @@ import javax.net.ssl.*;
 import javax.security.cert.X509Certificate;
 
 import recordManagement.Record;
+import usermanagement.User;
 
 import java.security.KeyStore;
 import java.security.cert.*;
@@ -23,9 +24,12 @@ import java.util.Scanner;
  * the firewall by following SSLSocketClientWithTunneling.java.
  */
 public class Client {
+	private ObjectOutputStream out; 
+	private ObjectInputStream in;
+	private Socket socket;
 
-	public void start(String host, int port) throws Exception {
-		try { /* set up a key manager for client authentication */
+	public void logIn(String host, int port) throws IOException {
+		 /* set up a key manager for client authentication */
 			// SSLSocketFactory factory = null;
 			// try {
 			// char[] password = "password".toCharArray();
@@ -54,8 +58,7 @@ public class Client {
 			// throw new IOException(e.getMessage());
 			// }
 			// SSLSocket socket = (SSLSocket)factory.createSocket(host, port);
-			Socket socket = new Socket("localhost", port);
-			System.out.println("\nsocket before handshake:\n" + socket + "\n");
+			socket = new Socket("localhost", port);
 
 			/*
 			 * send http request
@@ -70,33 +73,77 @@ public class Client {
 			// (X509Certificate)session.getPeerCertificateChain()[0];
 			// String subject = cert.getSubjectDN().getName();
 
-			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-			Scanner input = new Scanner(System.in);
-			Object message = null;
-			String command = null;
-			out.writeObject(command);
+			out = new ObjectOutputStream(socket.getOutputStream());
+			in = new ObjectInputStream(socket.getInputStream());
+	}
+	
+	public ArrayList<Record> getRecords() {
+		try {
+			out.writeObject("getrecords");
 			out.flush();
-			message = in.readObject();
-			if (message instanceof String) {
-				message = (String) message;
-			} else if (message instanceof ArrayList<?>) {
-				ArrayList<Record> medicalRecords = (ArrayList<Record>) message;
-				for (Record record : medicalRecords) {
-					System.out.println(record.getPatient());
-					System.out.println(record.getDoctor());
-					System.out.println(record.getNurse());
-					System.out.println(record.getDivision());
-				}
-			} else {
-				System.out.println("Answer not a string");
-			}
-			in.close();
-			out.close();
-			socket.close();
-		} catch (Exception e) {
+			return (ArrayList<Record>) in.readObject();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public String getLog() {
+		try {
+			out.writeObject("getlog");
+			out.flush();
+			return (String) in.readObject();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public void saveRecord(Record record) {
+		try {
+			out.writeObject("saverecord");
+			out.flush();
+			out.writeObject(record);
+			out.flush();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public void saveNewRecord(Record record) {
+		try {
+			out.writeObject("savenewrecord");
+			out.flush();
+			out.writeObject(record);
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void logUpdate(String action) {
+		try {
+			out.writeObject("logupdate");
+			out.flush();
+			out.writeObject(action);
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void logOut() {
+		try {
+			out.writeObject("end");
+			in.close();
+			out.close();
+			socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

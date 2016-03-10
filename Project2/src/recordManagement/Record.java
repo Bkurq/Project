@@ -1,6 +1,7 @@
 package recordManagement;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Class Record is a container class that allows other classes to handle medical records.
@@ -9,6 +10,7 @@ import java.io.Serializable;
  */
 public class Record implements Serializable {
 	private String patient, doctor, nurse, division, medicalRecord;
+	private int index;
 	
 	public Record() {
 	}
@@ -107,6 +109,20 @@ public class Record implements Serializable {
 	 */
 	public void setDivision(String division) {
 		this.division = division;
+	}
+
+	/**
+	 * @return the index
+	 */
+	public int getIndex() {
+		return index;
+	}
+
+	/**
+	 * @param index the index to set
+	 */
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 }

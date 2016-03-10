@@ -14,6 +14,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JPasswordField;
@@ -29,6 +30,7 @@ import javax.swing.event.ListSelectionListener;
 
 import client.Client;
 import recordManagement.FileParser;
+import recordManagement.Record;
 import recordManagement.RecordManager;
 import usermanagement.DoctorUser;
 import usermanagement.GovernmentUser;
@@ -36,6 +38,7 @@ import usermanagement.User;
 
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -49,14 +52,14 @@ public class ClientGUI {
 	private JFrame frmMdview;
 	private JPasswordField textFieldPassword;
 	private JTextField textFieldUserName, textFieldPatient, textFieldDoctor, textFieldNurse, textFieldDivision;
-	private Vector<FileParser> medicalRecords;
 	private JList listRecords;
 	private User user;
 	private JTextPane textPaneRecord;
 	private JButton buttonLogOut, buttonSave, buttonRecord, buttonAdd, buttonEdit, buttonRemove, buttonLogIn;
 	private JScrollPane scrollPaneText;
 	private JButton buttonDiscard;
-	private RecordManager recordManager;
+	private ArrayList<Record> medicalRecords;
+	private Client client;
 	
 
 	/**
@@ -79,8 +82,7 @@ public class ClientGUI {
 	 * Create the application.
 	 */
 	public ClientGUI() {
-		recordManager = new RecordManager("records");
-		medicalRecords = new Vector<FileParser>(recordManager.getRecords());
+		client = new Client();
 		user = new DoctorUser("Doctor5", "Division1");
 		//user = new GovernmentUser("Gov5");
 		initialize();
@@ -145,19 +147,19 @@ public class ClientGUI {
 		buttonSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					recordManager.getRecords().get(listRecords.getSelectedIndex()).setRecord(textPaneRecord.getText());
-					recordManager.getRecords().get(listRecords.getSelectedIndex()).Log("Edited", user);
+					medicalRecords.get(listRecords.getSelectedIndex()).setRecord(textPaneRecord.getText());
+					client.saveRecord(medicalRecords.get(listRecords.getSelectedIndex()));
 					resetUIEdit();
 				} catch (Exception e1) {
 					if (!textFieldNurse.getText().trim().isEmpty() && !textFieldPatient.getText().trim().isEmpty()) {
-						FileParser p = new FileParser(new Date().toString());
-						recordManager.getRecords().add(p);
-						recordManager.getRecords().get(recordManager.getRecords().size()-1).setDoctor(user.getUserName());
-						recordManager.getRecords().get(recordManager.getRecords().size()-1).setNurse(textFieldNurse.getText());
-						recordManager.getRecords().get(recordManager.getRecords().size()-1).setDivision(user.getDivision());
-						recordManager.getRecords().get(recordManager.getRecords().size()-1).setPatient(textFieldPatient.getText());
-						recordManager.getRecords().get(recordManager.getRecords().size()-1).setRecord(textPaneRecord.getText());
-						recordManager.getRecords().get(recordManager.getRecords().size()-1).Log("Created", user);
+//						FileParser p = new FileParser(new Date().toString());
+//						recordManager.getRecords().add(p);
+//						recordManager.getRecords().get(recordManager.getRecords().size()-1).setDoctor(user.getUserName());
+//						recordManager.getRecords().get(recordManager.getRecords().size()-1).setNurse(textFieldNurse.getText());
+//						recordManager.getRecords().get(recordManager.getRecords().size()-1).setDivision(user.getDivision());
+//						recordManager.getRecords().get(recordManager.getRecords().size()-1).setPatient(textFieldPatient.getText());
+//						recordManager.getRecords().get(recordManager.getRecords().size()-1).setRecord(textPaneRecord.getText());
+//						recordManager.getRecords().get(recordManager.getRecords().size()-1).Log("Created", user);
 						resetUIEdit();
 					} else {
 						JOptionPane.showMessageDialog(null, "Skriv in patientens och sjuksj�terskans namn", "Fel", JOptionPane.ERROR_MESSAGE);
@@ -188,9 +190,9 @@ public class ClientGUI {
 		buttonRecord.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					textPaneRecord.setText(medicalRecords.get(listRecords.getMaxSelectionIndex()).getLog());
+//					textPaneRecord.setText(medicalRecords.get(listRecords.getMaxSelectionIndex()).getLog());
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "V�lj en patientjournal", "Fel", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Välj en patientjournal", "Fel", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -273,7 +275,15 @@ public class ClientGUI {
 		scrollPaneText.setViewportView(textPaneRecord);
 		textPaneRecord.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		
-		initList();
+		listRecords = new JList();
+		listRecords.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		listRecords.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		ListSelectionModel listSelectionModel = listRecords.getSelectionModel();
+        listSelectionModel.addListSelectionListener(new ListSelectionListener() {
+	        public void valueChanged(ListSelectionEvent e) {
+	        	displayRecord(e);
+	        }
+	    });
 		
 		scrollPaneRecords.setViewportView(listRecords);
 		panelRecords.setLayout(gl_panelRecords);
@@ -354,30 +364,25 @@ public class ClientGUI {
 		buttonLogIn.setBackground(new Color(50, 205, 50));
 		buttonLogIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-//				System.out.println(textFieldUserName.getText());
-//				System.out.println(textFieldPassword.getText());
-//				System.out.println("clientkeystore"+textFieldUserName.getText());
-//				//fпїЅrsпїЅk kпїЅra Client med rпїЅtt username
-//				String[] clientargs = {"localhost","9876",textFieldUserName.getText(),textFieldPassword.getText()};
-//				try {
-//					Client.main(clientargs);
-//				} catch (Exception e) {
-//					//throw new IOException(e.getMessage());
-//					System.out.println(e.getMessage());
-//				}
-				
-				if(user.canDelete()) {
-					buttonRemove.setEnabled(true);
-				} else {
-					buttonRemove.setEnabled(false);
+				try {
+					client.logIn("localhost", 4001);
+					medicalRecords = client.getRecords();
+					if (user.canDelete()) {
+						buttonRemove.setEnabled(true);
+					} else {
+						buttonRemove.setEnabled(false);
+					}
+					if (user.canCreate()) {
+						buttonAdd.setEnabled(true);
+					} else {
+						buttonAdd.setEnabled(false);
+					}
+					buttonLogOut.setEnabled(true);
+					buttonLogIn.setEnabled(false);
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, "Connection error","Error", JOptionPane.ERROR_MESSAGE);
+					e.printStackTrace();
 				}
-				if(user.canCreate()) {
-					buttonAdd.setEnabled(true);
-				} else {
-					buttonAdd.setEnabled(false);
-				}
-				buttonLogOut.setEnabled(true);
-				buttonLogIn.setEnabled(false);
 			}
 		});
 		buttonLogIn.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -387,6 +392,7 @@ public class ClientGUI {
 		buttonLogOut = new JButton("Logga ut");
 		buttonLogOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				client.logOut();
 				buttonLogIn.setEnabled(true);
 				buttonLogOut.setEnabled(false);
 				resetUIRecords();
@@ -401,6 +407,14 @@ public class ClientGUI {
 		buttonLogOut.setEnabled(false);
 		resetUIRecords();
 		buttonAdd.setEnabled(false);
+	}
+	
+	private void initList() {
+		DefaultListModel<Record> model = new DefaultListModel<Record>();
+		for(Record record: medicalRecords) {
+			model.addElement(record);
+		}
+		
 	}
 
 	private void resetUIEdit() {
@@ -454,25 +468,13 @@ public class ClientGUI {
 		}
 	}
 	
-	private void initList() {
-		listRecords = new JList(medicalRecords);
-		listRecords.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		listRecords.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		ListSelectionModel listSelectionModel = listRecords.getSelectionModel();
-        listSelectionModel.addListSelectionListener(new ListSelectionListener() {
-	        public void valueChanged(ListSelectionEvent e) {
-	        	displayRecord(e);
-	        }
-	    });
-	}
-
-	private void listChangeEnableUI(FileParser fileParser) {
-		if(user.canWrite(fileParser)) {
+	private void listChangeEnableUI(Record record) {
+		if(user.canWrite(record)) {
 			buttonEdit.setEnabled(true);
 		} else {
 			buttonEdit.setEnabled(false);
 		}
-		if(user.canRecord(fileParser)) {
+		if(user.canRecord(record)) {
 			buttonRecord.setEnabled(true);
 		} else {
 			buttonRecord.setEnabled(false);
