@@ -30,6 +30,7 @@ import javax.swing.event.ListSelectionListener;
 
 import client.Client;
 import recordManagement.FileParser;
+import recordManagement.Log;
 import recordManagement.Record;
 import recordManagement.RecordManager;
 import usermanagement.DoctorUser;
@@ -52,7 +53,7 @@ public class ClientGUI {
 	private JFrame frmMdview;
 	private JPasswordField textFieldPassword;
 	private JTextField textFieldUserName, textFieldPatient, textFieldDoctor, textFieldNurse, textFieldDivision;
-	private JList listRecords;
+	private JList<Record> listRecords;
 	private User user;
 	private JTextPane textPaneRecord;
 	private JButton buttonLogOut, buttonSave, buttonRecord, buttonAdd, buttonEdit, buttonRemove, buttonLogIn;
@@ -60,6 +61,7 @@ public class ClientGUI {
 	private JButton buttonDiscard;
 	private ArrayList<Record> medicalRecords;
 	private Client client;
+	private Log log;
 	
 
 	/**
@@ -147,22 +149,21 @@ public class ClientGUI {
 		buttonSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					medicalRecords.get(listRecords.getSelectedIndex()).setRecord(textPaneRecord.getText());
-					client.saveRecord(medicalRecords.get(listRecords.getSelectedIndex()));
+					listRecords.getSelectedValue().setRecord(textPaneRecord.getText());;
+					client.saveRecord(listRecords.getSelectedValue());
 					resetUIEdit();
 				} catch (Exception e1) {
 					if (!textFieldNurse.getText().trim().isEmpty() && !textFieldPatient.getText().trim().isEmpty()) {
-//						FileParser p = new FileParser(new Date().toString());
-//						recordManager.getRecords().add(p);
-//						recordManager.getRecords().get(recordManager.getRecords().size()-1).setDoctor(user.getUserName());
-//						recordManager.getRecords().get(recordManager.getRecords().size()-1).setNurse(textFieldNurse.getText());
-//						recordManager.getRecords().get(recordManager.getRecords().size()-1).setDivision(user.getDivision());
-//						recordManager.getRecords().get(recordManager.getRecords().size()-1).setPatient(textFieldPatient.getText());
-//						recordManager.getRecords().get(recordManager.getRecords().size()-1).setRecord(textPaneRecord.getText());
-//						recordManager.getRecords().get(recordManager.getRecords().size()-1).Log("Created", user);
+						Record record = new Record();
+						record.setDoctor(user.getUserName());
+						record.setDivision(user.getDivision());
+						record.setPatient(textFieldPatient.getText());
+						record.setNurse(textFieldNurse.getText());
+						record.setRecord(textPaneRecord.getText());
+						
 						resetUIEdit();
 					} else {
-						JOptionPane.showMessageDialog(null, "Skriv in patientens och sjuksj�terskans namn", "Fel", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Skriv in patientens och sjuksjöterskans namn", "Fel", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
@@ -190,7 +191,7 @@ public class ClientGUI {
 		buttonRecord.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-//					textPaneRecord.setText(medicalRecords.get(listRecords.getMaxSelectionIndex()).getLog());
+					textPaneRecord.setText(.getLog());
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Välj en patientjournal", "Fel", JOptionPane.ERROR_MESSAGE);
 				}
@@ -275,10 +276,11 @@ public class ClientGUI {
 		scrollPaneText.setViewportView(textPaneRecord);
 		textPaneRecord.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		
-		listRecords = new JList();
+		listRecords = new JList<Record>();
 		listRecords.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		listRecords.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		ListSelectionModel listSelectionModel = listRecords.getSelectionModel();
+
         listSelectionModel.addListSelectionListener(new ListSelectionListener() {
 	        public void valueChanged(ListSelectionEvent e) {
 	        	displayRecord(e);
@@ -367,6 +369,7 @@ public class ClientGUI {
 				try {
 					client.logIn("localhost", 4001);
 					medicalRecords = client.getRecords();
+					initList();
 					if (user.canDelete()) {
 						buttonRemove.setEnabled(true);
 					} else {
@@ -393,8 +396,10 @@ public class ClientGUI {
 		buttonLogOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				client.logOut();
+				buttonAdd.setEnabled(false);
 				buttonLogIn.setEnabled(true);
 				buttonLogOut.setEnabled(false);
+				listRecords.setModel(new DefaultListModel());
 				resetUIRecords();
 			}
 		});
@@ -414,7 +419,7 @@ public class ClientGUI {
 		for(Record record: medicalRecords) {
 			model.addElement(record);
 		}
-		
+		listRecords.setModel(model);
 	}
 
 	private void resetUIEdit() {

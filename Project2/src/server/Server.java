@@ -27,7 +27,7 @@ public class Server implements Runnable {
     public Server(ServerSocket ss) throws IOException {
     	log = new Log("log.txt");
     	recordManager = new RecordManager("records", log);
-    	user = user = new DoctorUser("Doctor5", "Division1");
+    	user = new DoctorUser("Doctor5", "Division1");
         serverSocket = ss;
         newListener();
     }
@@ -48,29 +48,38 @@ public class Server implements Runnable {
 
 				out = new ObjectOutputStream(socket.getOutputStream());
 				in = new ObjectInputStream(socket.getInputStream());
-
+				System.out.println("Handling request");
 				Object message = null;
 				while (true) {
+					message = in.readObject();
+					System.out.println(message);
 					if (message instanceof String) {
 						message = (String) message;
 						if(message.equals("getrecords")) {
+							System.out.println("Request recieved");
 							sent = recordManager.getRecords(user);
 							out.writeObject(sent);
+							out.flush();
+							System.out.println("Request handled");
 						} else if(message.equals("saverecord")) {
 							Record record = (Record) in.readObject();
 							recordManager.update(user, record);
+							recordManager.writeFiles();
 						} else if(message.equals("savenewrecord")) {
 							Record record = (Record) in.readObject();
 							recordManager.addNewRecord(user, record);
+							recordManager.writeFiles();
 						} else if(message.equals("getlog")) {
 							out.writeObject(log.getLog());
+							out.flush();
 						} else if(message.equals("logupdate")) {
 							log.log((String)in.readObject(), user);
+							log.writeFile();
 						} else if(message.equals("end")) {
 							break;
 						}
 					}
-					recordManager.writeFiles();
+					
 				}
 				in.close();
 				out.close();

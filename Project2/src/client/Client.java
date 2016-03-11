@@ -75,25 +75,27 @@ public class Client {
 
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
+			System.out.println("Connection established");
 	}
 	
 	public ArrayList<Record> getRecords() {
 		try {
 			out.writeObject("getrecords");
 			out.flush();
+			System.out.println("Requesting files");
 			return (ArrayList<Record>) in.readObject();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Files recieved");
 		return null;
 	}
 	
 	public String getLog() {
 		try {
 			out.writeObject("getlog");
-			out.flush();
 			return (String) in.readObject();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -106,9 +108,7 @@ public class Client {
 	public void saveRecord(Record record) {
 		try {
 			out.writeObject("saverecord");
-			out.flush();
 			out.writeObject(record);
-			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -117,9 +117,7 @@ public class Client {
 	public void saveNewRecord(Record record) {
 		try {
 			out.writeObject("savenewrecord");
-			out.flush();
 			out.writeObject(record);
-			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -128,9 +126,7 @@ public class Client {
 	public void logUpdate(String action) {
 		try {
 			out.writeObject("logupdate");
-			out.flush();
 			out.writeObject(action);
-			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

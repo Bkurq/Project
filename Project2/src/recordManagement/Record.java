@@ -124,5 +124,9 @@ public class Record implements Serializable {
 	public void setIndex(int index) {
 		this.index = index;
 	}
+	
+	public String toString() {
+		return patient;
+	}
 
 }

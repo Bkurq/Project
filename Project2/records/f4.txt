@@ -1,5 +1,4 @@
-Patient4
-Doctor4
-Nurse4
-Division1
-This is a medical record. Viewer discretion is advised.4
+Patient5
+Doctor5
+Nurse5
+Division5
