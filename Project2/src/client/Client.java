@@ -93,9 +93,15 @@ public class Client {
 		return null;
 	}
 	
+	public Record getRecord(int index) {
+		
+		return null;
+	}
+	
 	public String getLog() {
 		try {
 			out.writeObject("getlog");
+			out.flush();
 			return (String) in.readObject();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -108,7 +114,9 @@ public class Client {
 	public void saveRecord(Record record) {
 		try {
 			out.writeObject("saverecord");
+			out.flush();
 			out.writeObject(record);
+			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -117,16 +125,20 @@ public class Client {
 	public void saveNewRecord(Record record) {
 		try {
 			out.writeObject("savenewrecord");
+			out.flush();
 			out.writeObject(record);
+			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void logUpdate(String action) {
+	public void logUpdate(String action, int index) {
 		try {
 			out.writeObject("logupdate");
+			out.flush();
 			out.writeObject(action);
+			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -135,6 +147,7 @@ public class Client {
 	public void logOut() {
 		try {
 			out.writeObject("end");
+			out.flush();
 			in.close();
 			out.close();
 			socket.close();

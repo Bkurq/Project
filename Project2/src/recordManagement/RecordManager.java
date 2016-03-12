@@ -70,8 +70,8 @@ public class RecordManager {
 	
 	public boolean addNewRecord(User user, Record record) {
 		if(user.canCreate()) {
-			records.add(new FileParser(new Date().toString(), record));
-			log.log("Create " + records.get(records.size()-1).getFilePath(), user);
+			records.add(new FileParser(directoryPath + "/" + new Date().toString(), record));
+			log.log("Creat " + records.get(records.size()-1).getFilePath(), user);
 			return true;
 		}
 		return false;

@@ -160,8 +160,9 @@ public class ClientGUI {
 						record.setPatient(textFieldPatient.getText());
 						record.setNurse(textFieldNurse.getText());
 						record.setRecord(textPaneRecord.getText());
-						
 						resetUIEdit();
+						((DefaultListModel<Record>) listRecords.getModel()).addElement(record);
+						client.saveNewRecord(record);
 					} else {
 						JOptionPane.showMessageDialog(null, "Skriv in patientens och sjuksjöterskans namn", "Fel", JOptionPane.ERROR_MESSAGE);
 					}
@@ -191,7 +192,7 @@ public class ClientGUI {
 		buttonRecord.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					textPaneRecord.setText(.getLog());
+					//textPaneRecord.setText();
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Välj en patientjournal", "Fel", JOptionPane.ERROR_MESSAGE);
 				}
@@ -208,7 +209,7 @@ public class ClientGUI {
 		buttonDiscard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					textPaneRecord.setText(medicalRecords.get(listRecords.getSelectedIndex()).getRecord());
+					textPaneRecord.setText(listRecords.getSelectedValue().getRecord());
 				} catch (Exception e1) {
 					textFieldDivision.setText("");
 					textFieldDoctor.setText("");
@@ -276,7 +277,7 @@ public class ClientGUI {
 		scrollPaneText.setViewportView(textPaneRecord);
 		textPaneRecord.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		
-		listRecords = new JList<Record>();
+		listRecords = new JList<Record>(new DefaultListModel<Record>());
 		listRecords.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		listRecords.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		ListSelectionModel listSelectionModel = listRecords.getSelectionModel();
@@ -400,7 +401,11 @@ public class ClientGUI {
 				buttonLogIn.setEnabled(true);
 				buttonLogOut.setEnabled(false);
 				listRecords.setModel(new DefaultListModel());
+				medicalRecords = null;
+				log = null;
+				
 				resetUIRecords();
+				resetUIEdit();
 			}
 		});
 		buttonLogOut.setBackground(new Color(250, 128, 114));
@@ -415,11 +420,9 @@ public class ClientGUI {
 	}
 	
 	private void initList() {
-		DefaultListModel<Record> model = new DefaultListModel<Record>();
 		for(Record record: medicalRecords) {
-			model.addElement(record);
+			((DefaultListModel<Record>) listRecords.getModel()).addElement(record);
 		}
-		listRecords.setModel(model);
 	}
 
 	private void resetUIEdit() {
@@ -459,17 +462,13 @@ public class ClientGUI {
 		textFieldDivision.setText("");
 		textPaneRecord.setText("");
 		if (listRecords.getSelectedIndex() >= 0) {
-			ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-			listChangeEnableUI(medicalRecords.get(lsm.getMaxSelectionIndex()));
-			if (user.canRead(medicalRecords.get(lsm.getMaxSelectionIndex()))) {
-				textFieldPatient.setText(medicalRecords.get(lsm.getMaxSelectionIndex()).getPatient());
-				textFieldDoctor.setText(medicalRecords.get(lsm.getMaxSelectionIndex()).getDoctor());
-				textFieldNurse.setText(medicalRecords.get(lsm.getMaxSelectionIndex()).getNurse());
-				textFieldDivision.setText(medicalRecords.get(lsm.getMaxSelectionIndex()).getDivision());
-				textPaneRecord.setText(medicalRecords.get(lsm.getMaxSelectionIndex()).getRecord());
-			} else {
-				textPaneRecord.setText("Du har ingen rätt att visa den här patientjournalen");
-			}
+			listChangeEnableUI(listRecords.getSelectedValue());
+			textFieldPatient.setText(listRecords.getSelectedValue().getPatient());
+			textFieldDoctor.setText(listRecords.getSelectedValue().getDoctor());
+			textFieldNurse.setText(listRecords.getSelectedValue().getNurse());
+			textFieldDivision.setText(listRecords.getSelectedValue().getDivision());
+			textPaneRecord.setText(listRecords.getSelectedValue().getRecord());
+			client.logUpdate("View ", listRecords.getSelectedValue().getIndex());
 		}
 	}
 	

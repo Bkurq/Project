@@ -49,10 +49,10 @@ public class Log {
 		sb.append(log);
 		sb.append(System.lineSeparator());
 		sb.append(string);
-		sb.append(":");
-		sb.append(new Date().toString());
-		sb.append(":");
+		sb.append(" : ");
 		sb.append(user.getUserName());
+		sb.append(" : ");
+		sb.append(new Date().toString());
 
 		log = sb.toString();
 	}
