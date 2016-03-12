@@ -52,9 +52,19 @@ public class RecordManager {
 			Record record = fp.getRecord();
 			if(user.canRead(record)) {
 				record.setIndex(index);
-				matchingRecords.add(record);
+				matchingRecords.add(new Record(record));
 			}
 			index++;
+		}
+		for(Record record:matchingRecords) {
+			record.setIndex(0);
+			System.out.println(record.getIndex());
+		}
+		for(FileParser fp:records) {
+			Record record = fp.getRecord();
+			if(user.canRead(record)) {
+				System.out.println(record.getIndex());
+			}
 		}
 		return matchingRecords;
 	}

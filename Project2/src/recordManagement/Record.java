@@ -21,6 +21,7 @@ public class Record implements Serializable {
 		nurse = record.nurse;
 		division = record.division;
 		medicalRecord = record.medicalRecord;
+		index = record.index;
 	}
 	
 	/**
