@@ -28,15 +28,13 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import client.Client;
-import recordManagement.Log;
 import recordManagement.Record;
-import usermanagement.DoctorUser;
-import usermanagement.GovernmentUser;
-import usermanagement.User;
+import usermanagement.*;
 
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.awt.Color;
 
 public class ClientGUI {
@@ -52,7 +50,8 @@ public class ClientGUI {
 	private JButton buttonDiscard;
 	private ArrayList<Record> medicalRecords;
 	private Client client;
-	private Log log;
+	private String log;
+	private Date time = new Date();
 	
 
 	/**
@@ -76,8 +75,9 @@ public class ClientGUI {
 	 */
 	public ClientGUI() {
 		client = new Client();
-		user = new DoctorUser("Doctor5", "Division1");
+		//user = new DoctorUser("Doctor5", "Division1");
 		//user = new GovernmentUser("Gov5");
+		user = new NurseUser("nurse1", "Division1");
 		initialize();
 	}
 
@@ -154,6 +154,8 @@ public class ClientGUI {
 						resetUIEdit();
 						((DefaultListModel<Record>) listRecords.getModel()).addElement(record);
 						client.saveNewRecord(record);
+						medicalRecords = client.getRecords();
+						initList();
 					} else {
 						JOptionPane.showMessageDialog(null, "Skriv in patientens och sjuksjöterskans namn", "Fel", JOptionPane.ERROR_MESSAGE);
 					}
@@ -183,7 +185,8 @@ public class ClientGUI {
 		buttonRecord.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					//textPaneRecord.setText();
+					log = client.getLog();
+					textPaneRecord.setText(log);
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Välj en patientjournal", "Fel", JOptionPane.ERROR_MESSAGE);
 				}
@@ -319,7 +322,8 @@ public class ClientGUI {
 		buttonRemove = new JButton("Ta bort");
 		buttonRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				client.deleteRecord(listRecords.getSelectedValue().getIndex());
+				((DefaultListModel<Record>) listRecords.getModel()).remove(listRecords.getSelectedIndex());	
 			}
 		});
 		buttonRemove.setForeground(Color.BLACK);
@@ -362,15 +366,15 @@ public class ClientGUI {
 					client.logIn("localhost", 4001);
 					medicalRecords = client.getRecords();
 					initList();
-					if (user.canDelete()) {
-						buttonRemove.setEnabled(true);
-					} else {
-						buttonRemove.setEnabled(false);
-					}
 					if (user.canCreate()) {
 						buttonAdd.setEnabled(true);
 					} else {
 						buttonAdd.setEnabled(false);
+					}
+					if(user.canRecord()) {
+						buttonRecord.setEnabled(true);
+					} else {
+						buttonRecord.setEnabled(false);
 					}
 					buttonLogOut.setEnabled(true);
 					buttonLogIn.setEnabled(false);
@@ -411,6 +415,7 @@ public class ClientGUI {
 	}
 	
 	private void initList() {
+		listRecords.setModel(new DefaultListModel<Record>());
 		for(Record record: medicalRecords) {
 			((DefaultListModel<Record>) listRecords.getModel()).addElement(record);
 		}
@@ -434,7 +439,6 @@ public class ClientGUI {
 		buttonRemove.setEnabled(false);
 		buttonEdit.setEnabled(false);
 		buttonSave.setEnabled(false);
-		buttonRecord.setEnabled(false);
 		buttonDiscard.setEnabled(false);
 		textPaneRecord.setEditable(false);
 		textPaneRecord.setBackground(Color.LIGHT_GRAY);
@@ -445,21 +449,26 @@ public class ClientGUI {
 	}
 
 	public void displayRecord(ListSelectionEvent e) {
-		resetUIRecords();
-		
-		textFieldPatient.setText("");
-		textFieldDoctor.setText("");
-		textFieldNurse.setText("");
-		textFieldDivision.setText("");
-		textPaneRecord.setText("");
-		if (listRecords.getSelectedIndex() >= 0) {
-			((DefaultListModel<Record>)listRecords.getModel()).set(listRecords.getSelectedIndex(), client.getRecord(listRecords.getSelectedValue().getIndex()));
-			listChangeEnableUI(listRecords.getSelectedValue());
-			textFieldPatient.setText(listRecords.getSelectedValue().getPatient());
-			textFieldDoctor.setText(listRecords.getSelectedValue().getDoctor());
-			textFieldNurse.setText(listRecords.getSelectedValue().getNurse());
-			textFieldDivision.setText(listRecords.getSelectedValue().getDivision());
-			textPaneRecord.setText(listRecords.getSelectedValue().getRecord());
+		Date date = new Date();
+		if (!date.toString().equals(time.toString())) {
+			resetUIRecords();
+
+			textFieldPatient.setText("");
+			textFieldDoctor.setText("");
+			textFieldNurse.setText("");
+			textFieldDivision.setText("");
+			textPaneRecord.setText("");
+			if (listRecords.getSelectedIndex() >= 0) {
+				((DefaultListModel<Record>) listRecords.getModel()).set(listRecords.getSelectedIndex(),
+						client.getRecord(listRecords.getSelectedValue().getIndex()));
+				listChangeEnableUI(listRecords.getSelectedValue());
+				textFieldPatient.setText(listRecords.getSelectedValue().getPatient());
+				textFieldDoctor.setText(listRecords.getSelectedValue().getDoctor());
+				textFieldNurse.setText(listRecords.getSelectedValue().getNurse());
+				textFieldDivision.setText(listRecords.getSelectedValue().getDivision());
+				textPaneRecord.setText(listRecords.getSelectedValue().getRecord());
+			}
+			time = date;
 		}
 	}
 	
@@ -469,10 +478,10 @@ public class ClientGUI {
 		} else {
 			buttonEdit.setEnabled(false);
 		}
-		if(user.canRecord(record)) {
-			buttonRecord.setEnabled(true);
+		if (user.canDelete()) {
+			buttonRemove.setEnabled(true);
 		} else {
-			buttonRecord.setEnabled(false);
+			buttonRemove.setEnabled(false);
 		}
 		buttonSave.setEnabled(false);
 		buttonDiscard.setEnabled(false);

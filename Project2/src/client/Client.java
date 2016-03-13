@@ -8,12 +8,11 @@ import javax.net.ssl.*;
 import javax.security.cert.X509Certificate;
 
 import recordManagement.Record;
-import usermanagement.User;
+import usermanagement.*;
 
 import java.security.KeyStore;
 import java.security.cert.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /*
  * This example shows how to set up a key manager to perform client
@@ -139,6 +138,17 @@ public class Client {
 			out.writeObject(record);
 			out.flush();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteRecord(int index) {
+		try {
+			out.writeObject("deleterecord");
+			out.flush();
+			out.writeObject(index);
+			out.flush();
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}

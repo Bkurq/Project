@@ -25,7 +25,7 @@ public class GovernmentUser extends User {
 	}
 	
 	@Override
-	public boolean canRecord(Record record) {
+	public boolean canRecord() {
 		return true;
 	}
 	

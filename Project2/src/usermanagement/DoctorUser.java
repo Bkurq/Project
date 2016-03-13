@@ -31,7 +31,7 @@ public class DoctorUser extends User {
 	}
 	
 	@Override
-	public boolean canRecord(Record record) {
+	public boolean canRecord() {
 		return false;
 	}
 	

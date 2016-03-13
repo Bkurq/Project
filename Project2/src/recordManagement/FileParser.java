@@ -2,6 +2,7 @@ package recordManagement;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -88,6 +89,11 @@ public class FileParser {
 	
 	public Record getRecord() {
 		return record;
+	}
+	
+	public void delete() {
+		File file = new File(filePath);
+		file.delete();
 	}
 	
 	public boolean equals(Object object) {

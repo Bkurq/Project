@@ -3,7 +3,7 @@ package recordManagement;
 import java.util.ArrayList;
 import java.util.Date;
 
-import usermanagement.User;
+import usermanagement.*;
 
 import java.io.File;
 
@@ -73,6 +73,16 @@ public class RecordManager {
 		
 	}
 	
+	public boolean deleteRecordAtIndex(User user, int index) {
+		if(user.canDelete()) {
+			log.log("Delete " + records.get(index).getFilePath(), user);
+			records.get(index).delete();
+			records.remove(index);
+			return true;
+		}
+		return false;
+	}
+	
 	public boolean update(User user, Record record) {
 		if(user.canWrite(record)) {
 			records.get(record.getIndex()).getRecord().setRecord(record.getRecord());
@@ -98,6 +108,5 @@ public class RecordManager {
 		for(FileParser medicalRecord:records) {
 			medicalRecord.writeFile();
 		}
-		log.writeFile();
 	}
 }

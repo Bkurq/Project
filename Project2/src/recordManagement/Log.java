@@ -8,7 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
-import usermanagement.User;
+import usermanagement.*;
 
 public class Log {
 	private String filePath, log;
@@ -55,6 +55,7 @@ public class Log {
 		sb.append(new Date().toString());
 
 		log = sb.toString();
+		writeFile();
 	}
 
 	public void writeFile() {

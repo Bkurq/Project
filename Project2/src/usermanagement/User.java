@@ -36,10 +36,9 @@ public abstract class User {
 	
 	/**
 	 * Checks if the user can delete the record.
-	 * @param fp
 	 * @return
 	 */
-	public abstract boolean canRecord(Record record);
+	public abstract boolean canRecord();
 	
 	/**
 	 * Checks if the user can create a record

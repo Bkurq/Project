@@ -1,5 +1,0 @@
-Patient3
-Doctor3
-Nurse3
-Division3
-This is a medical record. Viewer discretion is advised.3

@@ -12,6 +12,8 @@ import recordManagement.Log;
 import recordManagement.Record;
 import recordManagement.RecordManager;
 import usermanagement.DoctorUser;
+import usermanagement.GovernmentUser;
+import usermanagement.NurseUser;
 import usermanagement.PatientUser;
 import usermanagement.User;
 
@@ -27,8 +29,10 @@ public class Server implements Runnable {
     public Server(ServerSocket ss) throws IOException {
     	log = new Log("log.txt");
     	recordManager = new RecordManager("records", log);
-    	user = new DoctorUser("Doctor5", "Division1");
-        serverSocket = ss;
+    	//user = new DoctorUser("Doctor5", "Division1");
+        //user = new GovernmentUser("Gov5");
+    	user = new NurseUser("nurse1", "Division1");
+    	serverSocket = ss;
         newListener();
     }
 
@@ -56,30 +60,32 @@ public class Server implements Runnable {
 					if (message instanceof String) {
 						message = (String) message;
 						if(message.equals("getrecords")) {
-							System.out.println("Request recieved");
 							sent = recordManager.getRecords(user);
 							out.writeObject(sent);
 							out.flush();
-							System.out.println("Request handled");
-						} else if(message.equals("getrecord")) {
-							out.writeObject(recordManager.getRecordAtIndex(user, (int) in.readObject()));
+						} else if (message.equals("getrecord")) {
+							int index = (int) in.readObject();
+							out.writeObject(recordManager.getRecordAtIndex(user, index));
 							out.flush();
-						} else if(message.equals("saverecord")) {
+						} else if (message.equals("deleterecord")) {
+							int index = (int) in.readObject();
+							recordManager.deleteRecordAtIndex(user, index);
+						} else if (message.equals("saverecord")) {
 							Record record = (Record) in.readObject();
 							recordManager.update(user, record);
 							recordManager.writeFiles();
-						} else if(message.equals("savenewrecord")) {
+						} else if (message.equals("savenewrecord")) {
 							Record record = (Record) in.readObject();
 							recordManager.addNewRecord(user, record);
 							recordManager.writeFiles();
-						} else if(message.equals("getlog")) {
+						} else if (message.equals("getlog")) {
 							out.writeObject(log.getLog());
 							out.flush();
-						} else if(message.equals("end")) {
+						} else if (message.equals("end")) {
 							break;
 						}
 					}
-					
+
 				}
 				in.close();
 				out.close();
