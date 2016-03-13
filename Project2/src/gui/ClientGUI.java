@@ -98,7 +98,7 @@ public class ClientGUI {
 		frmMdview.getContentPane().setBackground(new Color(245, 255, 250));
 		frmMdview.setIconImage(Toolkit.getDefaultToolkit().getImage(ClientGUI.class.getResource("/gui/icon.png")));
 		frmMdview.setTitle("Journalakuten");
-		frmMdview.setBounds(100, 100, 800, 597);
+		frmMdview.setBounds(100, 100, 800, 602);
 		frmMdview.setMinimumSize(new Dimension(800, 597));
 		frmMdview.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -462,13 +462,13 @@ public class ClientGUI {
 		textFieldDivision.setText("");
 		textPaneRecord.setText("");
 		if (listRecords.getSelectedIndex() >= 0) {
+			((DefaultListModel<Record>)listRecords.getModel()).set(listRecords.getSelectedIndex(), client.getRecord(listRecords.getSelectedValue().getIndex()));
 			listChangeEnableUI(listRecords.getSelectedValue());
 			textFieldPatient.setText(listRecords.getSelectedValue().getPatient());
 			textFieldDoctor.setText(listRecords.getSelectedValue().getDoctor());
 			textFieldNurse.setText(listRecords.getSelectedValue().getNurse());
 			textFieldDivision.setText(listRecords.getSelectedValue().getDivision());
 			textPaneRecord.setText(listRecords.getSelectedValue().getRecord());
-			client.logUpdate("View ", listRecords.getSelectedValue().getIndex());
 		}
 	}
 	

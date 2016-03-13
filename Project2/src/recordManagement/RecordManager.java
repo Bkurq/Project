@@ -57,16 +57,20 @@ public class RecordManager {
 			index++;
 		}
 		for(Record record:matchingRecords) {
-			record.setIndex(0);
-			System.out.println(record.getIndex());
-		}
-		for(FileParser fp:records) {
-			Record record = fp.getRecord();
-			if(user.canRead(record)) {
-				System.out.println(record.getIndex());
-			}
+			record.setRecord("");
 		}
 		return matchingRecords;
+	}
+	
+	public Record getRecordAtIndex(User user, int index) {
+		Record record = records.get(index).getRecord();
+		if(user.canRead(record)) {
+			log.log("View  " + records.get(record.getIndex()).getFilePath(), user);
+			return record;
+		} else {
+			return new Record();
+		}
+		
 	}
 	
 	public boolean update(User user, Record record) {

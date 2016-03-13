@@ -94,7 +94,17 @@ public class Client {
 	}
 	
 	public Record getRecord(int index) {
-		
+		try {
+			out.writeObject("getrecord");
+			out.flush();
+			out.writeObject(index);
+			out.flush();
+			return (Record) in.readObject();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	
@@ -127,17 +137,6 @@ public class Client {
 			out.writeObject("savenewrecord");
 			out.flush();
 			out.writeObject(record);
-			out.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void logUpdate(String action, int index) {
-		try {
-			out.writeObject("logupdate");
-			out.flush();
-			out.writeObject(action);
 			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
