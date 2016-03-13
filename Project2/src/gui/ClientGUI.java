@@ -9,7 +9,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextPane;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.AbstractListModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
@@ -29,10 +28,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import client.Client;
-import recordManagement.FileParser;
 import recordManagement.Log;
 import recordManagement.Record;
-import recordManagement.RecordManager;
 import usermanagement.DoctorUser;
 import usermanagement.GovernmentUser;
 import usermanagement.User;
@@ -40,13 +37,7 @@ import usermanagement.User;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Vector;
 import java.awt.Color;
-import java.awt.Container;
-
-import javax.swing.UIManager;
 
 public class ClientGUI {
 
