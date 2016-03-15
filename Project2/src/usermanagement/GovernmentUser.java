@@ -1,9 +1,11 @@
 package usermanagement;
 
+import java.io.Serializable;
+
 import recordManagement.FileParser;
 import recordManagement.Record;
 
-public class GovernmentUser extends User {
+public class GovernmentUser extends User implements Serializable {
 
 	public GovernmentUser(String name) {
 		super(name);

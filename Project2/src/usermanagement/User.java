@@ -1,8 +1,10 @@
 package usermanagement;
 
+import java.io.Serializable;
+
 import recordManagement.Record;
 
-public abstract class User {
+public abstract class User implements Serializable {
 	protected String userName;
 
 	public User(String userName) {
@@ -48,4 +50,5 @@ public abstract class User {
 	public abstract boolean canCreate();
 	
 	public abstract String getDivision();
+	
 }

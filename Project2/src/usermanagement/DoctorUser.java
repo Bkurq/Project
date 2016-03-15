@@ -1,9 +1,11 @@
 package usermanagement;
 
+import java.io.Serializable;
+
 import recordManagement.FileParser;
 import recordManagement.Record;
 
-public class DoctorUser extends User {
+public class DoctorUser extends User implements Serializable {
 	private String division;
 
 	public DoctorUser(String name, String division) {
@@ -17,7 +19,9 @@ public class DoctorUser extends User {
 
 	@Override
 	public boolean canRead(Record record) {
-		return record.getDoctor().equals(userName) || record.getDivision().equals(division);
+		boolean one = record.getDoctor().equals(userName);
+		boolean two = record.getDivision().equals(division);
+		return one || two;
 	}
 
 	@Override

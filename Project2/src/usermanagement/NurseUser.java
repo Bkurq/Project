@@ -1,9 +1,11 @@
 package usermanagement;
 
+import java.io.Serializable;
+
 import recordManagement.FileParser;
 import recordManagement.Record;
 
-public class NurseUser extends User {
+public class NurseUser extends User implements Serializable {
 	private String division;
 
 	public NurseUser(String name, String division) {

@@ -28,30 +28,40 @@ public class Server implements Runnable {
 
     public Server(ServerSocket ss) throws IOException {
     	log = new Log("log.txt");
-    	recordManager = new RecordManager("records", log);
-    	//user = new DoctorUser("Doctor5", "Division1");
-        //user = new GovernmentUser("Gov5");
-    	user = new NurseUser("nurse1", "Division1");
     	serverSocket = ss;
-        newListener();
-    }
+        run();
+	}
 
-    public void run() {
+	public void run() {
 		while (true) {
-			Socket socket;
 			try {
-				// SSLSocket socket=(SSLSocket)serverSocket.accept();
-				// SSLSession session = socket.getSession();
-				// X509Certificate cert =
-				// (X509Certificate)session.getPeerCertificateChain()[0];
-				// String subject = cert.getSubjectDN().getName();
-				socket = serverSocket.accept();
-				System.out.println("client connected");
-				// System.out.println("client name (cert subject DN field): " +
-				// subject);
+				recordManager = new RecordManager("records", log);
+				SSLSocket socket = (SSLSocket) serverSocket.accept();
+				SSLSession session = socket.getSession();
+				X509Certificate cert = (X509Certificate) session.getPeerCertificateChain()[0];
+				String subject = cert.getSubjectDN().getName();
+				String[] parts = subject.split("\\s+");
+				parts[0] = parts[0].substring(3);
+				parts[2] = parts[2].substring(0, parts[2].length() - 1);
+				if (parts[0].equals("gov")) {
+					user = new GovernmentUser("gov");
+				} else if (parts[0].equals("doctor2") && parts[2].equals("diagnostik")) {
+					user = new DoctorUser("doctor1", "diagnostik");
+				} else if (parts[0].equals("doctor2") && parts[2].equals("medicin")) {
+					user = new DoctorUser("doctor2", "medicin");
+				} else if (parts[1].equals("NURSE")) {
+					user = new NurseUser(parts[0], parts[2]);
+				} else if (parts[1].equals("PATIENT")) {
+					user = new PatientUser(parts[0]);
+				}
+				if (user == null) {
+					System.out.println("user null");
+				}
 
 				out = new ObjectOutputStream(socket.getOutputStream());
 				in = new ObjectInputStream(socket.getInputStream());
+				out.writeObject(user);
+				out.flush();
 				System.out.println("Handling request");
 				Object message = null;
 				while (true) {
@@ -59,7 +69,7 @@ public class Server implements Runnable {
 					System.out.println(message);
 					if (message instanceof String) {
 						message = (String) message;
-						if(message.equals("getrecords")) {
+						if (message.equals("getrecords")) {
 							sent = recordManager.getRecords(user);
 							out.writeObject(sent);
 							out.flush();
@@ -70,6 +80,7 @@ public class Server implements Runnable {
 						} else if (message.equals("deleterecord")) {
 							int index = (int) in.readObject();
 							recordManager.deleteRecordAtIndex(user, index);
+							recordManager.writeFiles();
 						} else if (message.equals("saverecord")) {
 							Record record = (Record) in.readObject();
 							recordManager.update(user, record);
@@ -101,22 +112,20 @@ public class Server implements Runnable {
 				e.printStackTrace();
 			}
 		}
-    }
-
-    private void newListener() { (new Thread(this)).start(); } // calls run()
+	}
 
     public static void main(String args[]) {
-        System.out.println("\nServer Started\n");
+        System.out.println("\nServer Started" + "\n");
         int port = -1;
         if (args.length >= 1) {
             port = Integer.parseInt(args[0]);
         }
         String type = "TLS";
         try {
-            //ServerSocketFactory ssf = getServerSocketFactory(type);
-            //ServerSocket ss = ssf.createServerSocket(port);
-            //((SSLServerSocket)ss).setNeedClientAuth(true);
-            new Server(new ServerSocket(port));
+            ServerSocketFactory ssf = getServerSocketFactory(type);
+            ServerSocket ss = ssf.createServerSocket(port);
+            ((SSLServerSocket)ss).setNeedClientAuth(true);
+            new Server(ss);
         } catch (IOException e) {
             System.out.println("Unable to start Server: " + e.getMessage());
             e.printStackTrace();
@@ -134,8 +143,8 @@ public class Server implements Runnable {
 				KeyStore ts = KeyStore.getInstance("JKS");
                 char[] password = "password".toCharArray();
 
-                ks.load(new FileInputStream("e:\\Documents\\Skola\\Datas�kerhet\\Project\\Project2\\src\\server\\serverkeystore2"), password);  // keystore password (storepass)
-                ts.load(new FileInputStream("e:\\Documents\\Skola\\Datas�kerhet\\Project\\Project2\\src\\server\\servertruststore2"), password); // truststore password (storepass)
+                ks.load(new FileInputStream("src/server/serverkeystore2"), password);  // keystore password (storepass)
+                ts.load(new FileInputStream("src/server/servertruststore2"), password); // truststore password (storepass)
                 kmf.init(ks, password); // certificate password (keypass)
                 tmf.init(ts);  // possible to use keystore as truststore here
                 ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);

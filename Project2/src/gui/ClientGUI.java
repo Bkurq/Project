@@ -52,6 +52,8 @@ public class ClientGUI {
 	private Client client;
 	private String log;
 	private Date time = new Date();
+	private JTextField textFieldHost;
+	private JTextField textFieldPort;
 	
 
 	/**
@@ -75,9 +77,6 @@ public class ClientGUI {
 	 */
 	public ClientGUI() {
 		client = new Client();
-		//user = new DoctorUser("Doctor5", "Division1");
-		//user = new GovernmentUser("Gov5");
-		user = new NurseUser("nurse1", "Division1");
 		initialize();
 	}
 
@@ -113,7 +112,7 @@ public class ClientGUI {
 						.addComponent(panelAction, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE)
 						.addComponent(panelAuthentication, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(panelRecords, GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+					.addComponent(panelRecords, GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
@@ -123,8 +122,8 @@ public class ClientGUI {
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addComponent(panelRecords, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(panelAuthentication, GroupLayout.PREFERRED_SIZE, 289, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+							.addComponent(panelAuthentication, GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
+							.addGap(18)
 							.addComponent(panelAction, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap())
 		);
@@ -323,7 +322,9 @@ public class ClientGUI {
 		buttonRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				client.deleteRecord(listRecords.getSelectedValue().getIndex());
-				((DefaultListModel<Record>) listRecords.getModel()).remove(listRecords.getSelectedIndex());	
+				((DefaultListModel<Record>) listRecords.getModel()).remove(listRecords.getSelectedIndex());
+				medicalRecords = client.getRecords();
+				initList();
 			}
 		});
 		buttonRemove.setForeground(Color.BLACK);
@@ -363,7 +364,7 @@ public class ClientGUI {
 		buttonLogIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					client.logIn("localhost", 4001);
+					user = client.logIn(textFieldHost.getText(), Integer.parseInt(textFieldPort.getText()), textFieldUserName.getText(), textFieldPassword.getPassword());
 					medicalRecords = client.getRecords();
 					initList();
 					if (user.canCreate()) {
@@ -379,13 +380,22 @@ public class ClientGUI {
 					buttonLogOut.setEnabled(true);
 					buttonLogIn.setEnabled(false);
 				} catch (IOException e) {
-					JOptionPane.showMessageDialog(null, "Connection error","Error", JOptionPane.ERROR_MESSAGE);
 					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Connection error","Error", JOptionPane.ERROR_MESSAGE);
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Enter a valid port","Error", JOptionPane.ERROR_MESSAGE);
+				} catch (NullPointerException e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Enter credentials","Error", JOptionPane.ERROR_MESSAGE);
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Fel på användare","Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 		buttonLogIn.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		buttonLogIn.setBounds(10, 166, 212, 50);
+		buttonLogIn.setBounds(10, 212, 212, 50);
 		panelAuthentication.add(buttonLogIn);
 		
 		buttonLogOut = new JButton("Logga ut");
@@ -406,12 +416,31 @@ public class ClientGUI {
 		buttonLogOut.setBackground(new Color(250, 128, 114));
 		buttonLogOut.setForeground(new Color(255, 255, 255));
 		buttonLogOut.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		buttonLogOut.setBounds(10, 227, 212, 50);
+		buttonLogOut.setBounds(10, 274, 212, 50);
 		panelAuthentication.add(buttonLogOut);
 		frmMdview.getContentPane().setLayout(groupLayout);
 		buttonLogOut.setEnabled(false);
+		
+		JLabel labelHost = new JLabel("Host");
+		labelHost.setFont(new Font("Dialog", Font.PLAIN, 13));
+		labelHost.setBounds(10, 143, 68, 14);
+		panelAuthentication.add(labelHost);
+		
+		textFieldHost = new JTextField();
+		textFieldHost.setBounds(10, 168, 105, 30);
+		panelAuthentication.add(textFieldHost);
+		
+		textFieldPort = new JTextField();
+		textFieldPort.setBounds(122, 168, 100, 30);
+		panelAuthentication.add(textFieldPort);
+		
+		JLabel lablePort = new JLabel("Port");
+		lablePort.setFont(new Font("Dialog", Font.PLAIN, 13));
+		lablePort.setBounds(122, 143, 68, 14);
+		panelAuthentication.add(lablePort);
 		resetUIRecords();
 		buttonAdd.setEnabled(false);
+		buttonRecord.setEnabled(false);
 	}
 	
 	private void initList() {
@@ -459,14 +488,19 @@ public class ClientGUI {
 			textFieldDivision.setText("");
 			textPaneRecord.setText("");
 			if (listRecords.getSelectedIndex() >= 0) {
-				((DefaultListModel<Record>) listRecords.getModel()).set(listRecords.getSelectedIndex(),
-						client.getRecord(listRecords.getSelectedValue().getIndex()));
-				listChangeEnableUI(listRecords.getSelectedValue());
-				textFieldPatient.setText(listRecords.getSelectedValue().getPatient());
-				textFieldDoctor.setText(listRecords.getSelectedValue().getDoctor());
-				textFieldNurse.setText(listRecords.getSelectedValue().getNurse());
-				textFieldDivision.setText(listRecords.getSelectedValue().getDivision());
-				textPaneRecord.setText(listRecords.getSelectedValue().getRecord());
+				Record r = client.getRecord(listRecords.getSelectedValue().getIndex());
+				if (r != null) {
+					((DefaultListModel<Record>) listRecords.getModel()).set(listRecords.getSelectedIndex(), r);
+					listChangeEnableUI(listRecords.getSelectedValue());
+					textFieldPatient.setText(listRecords.getSelectedValue().getPatient());
+					textFieldDoctor.setText(listRecords.getSelectedValue().getDoctor());
+					textFieldNurse.setText(listRecords.getSelectedValue().getNurse());
+					textFieldDivision.setText(listRecords.getSelectedValue().getDivision());
+					textPaneRecord.setText(listRecords.getSelectedValue().getRecord());
+				} else {
+					medicalRecords = client.getRecords();
+					initList();
+				}
 			}
 			time = date;
 		}
@@ -487,5 +521,4 @@ public class ClientGUI {
 		buttonDiscard.setEnabled(false);
 		
 	}
-	
 }

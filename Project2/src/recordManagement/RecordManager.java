@@ -63,6 +63,8 @@ public class RecordManager {
 	}
 	
 	public Record getRecordAtIndex(User user, int index) {
+		if(index < 0 || index >= records.size())
+			return null;
 		Record record = records.get(index).getRecord();
 		if(user.canRead(record)) {
 			log.log("View  " + records.get(record.getIndex()).getFilePath(), user);
@@ -74,10 +76,18 @@ public class RecordManager {
 	}
 	
 	public boolean deleteRecordAtIndex(User user, int index) {
+		if(index == records.size())
+			index--;
 		if(user.canDelete()) {
 			log.log("Delete " + records.get(index).getFilePath(), user);
 			records.get(index).delete();
 			records.remove(index);
+			int i = 0;
+			for (FileParser fp : records) {
+				Record record = fp.getRecord();
+				record.setIndex(i);
+				i++;
+			}
 			return true;
 		}
 		return false;
